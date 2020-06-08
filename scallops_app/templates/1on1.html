@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title%}{% endblock %}
+{% load static %}
+
+{% block content %}
+<<<<<<< HEAD
+
+
+{% for user in all_users %}
+=======
+>>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
+<div class="one">
+    <form action="/next/" method="post">
+        <fieldset>
+    {% csrf_token %}
+    <button>pass</button>
+    </form>
+    <img src='{%static "images/pic_2.gif"%}' alt=""><br>
+<<<<<<< HEAD
+    <label for="/like/">{{ user.first_name }} 22 yr old {{ user.city }}</label>
+
+    <form action="/ajax/like" method="post">
+    {% csrf_token %}
+    <button><input type="submit" value="LIKE"></button>
+</form>
+</fieldset>
+</div>
+{% endfor %}
+
+=======
+    <label for="/like/">Lora 22 yr old los angeles</label>
+    <form action="" method="post">
+    {% csrf_token %}
+    <button>like</button>
+</form>
+</fieldset>
+>>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
+
+    <!-- <div class="form-group">
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile02">
+        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+      </div>
+      <div class="input-group-append">
+        <span class="input-group-text" id="">Upload</span>
+      </div>
+    </div>
+  </div>
+</div> -->
+{% endblock %}
+<<<<<<< HEAD
+
+
+<script>
+    $('form').submit(function(e){
+    e.preventDefault()
+    console.log($(this).serialize())
+    $.ajax({
+        url: '/ajax/like/',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(serverResponse){
+        $('.answer').html(serverResponse)
+        console.log("Received this from server: ", serverResponse)
+    }
+  })
+})
+
+  </script>
+=======
+>>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a

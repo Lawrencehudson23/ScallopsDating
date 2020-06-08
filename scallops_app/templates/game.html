@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game</title>
+    {% load staticfiles %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <h1>Would you rather...</h1>
+
+            <form action="/ajax/response/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="option" value="{{ question.option1 }}">
+                <input type="submit" value="{{ question.option1 }}">
+                <!-- <button>{{ question.option1 }}</button> -->
+            </form>
+                <p>or</p>
+            <form action="/ajax/response/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="option" value="{{ question.option2 }}">
+                <input type="submit" value='{{ question.option2 }}'>
+            </form>
+
+            
+            <div class="answer">
+                <p></p>
+            </div>
+
+            <a href="/game/">Next Question</a>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</body>
+
+  <!-- NOW LET'S ADD SOME JAVASCRIPT TO STOP FORM SUBMISSION! -->
+  <script>
+    // You could also put this code in another JavaScript file... Remember to user $(document).ready() if the script tag is included before the DOM nodes you care about...
+    // $('form').submit(function(e){
+    //   // preventDefault stops the default action of the event (e) from being triggered.
+    //   e.preventDefault();
+    //   console.log("Form submitted but no HTTP request sent to server!");
+    // });
+
+    $('form').submit(function(e){
+    e.preventDefault()
+    console.log($(this).serialize())
+    $.ajax({
+        url: '/ajax/game/',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(serverResponse){
+        $('.answer').html(serverResponse)
+        console.log("Received this from server: ", serverResponse)
+    }
+  })
+})
+
+  </script>
+
+
+
+</html>

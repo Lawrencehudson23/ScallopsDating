@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messages</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    {% load staticfiles %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    
+
+    <!-- start: post a message -->
+        <h2>Partner name</h2>
+        <div class="message_box" style="margin-bottom: 50px; width: 800px; min-height: 500px; max-height: 100px; overflow: scroll; border-style: solid; border-color: black;">
+            {% for message in all_messages %}
+            <p>{{ logged_user.first_name }}: {{ message.message }}</p>
+            {% endfor %}
+        </div>
+
+        <form class="post_message" action="/post_message" method="POST">
+            <textarea name="message" cols="100" rows="10"></textarea>
+            {% csrf_token %}
+            <input type="submit" value="send">
+        </form>
+    
+   
+
+    <!-- end: post a message -->
+
+
+
+
+
+    </form>
+
+
+
+
+
+
+
+</body>
+
+<script>
+
+    $('.post_message').submit(function(e){
+    e.preventDefault()
+    console.log($(this).serialize())
+    $.ajax({
+        url: '/ajax/message/',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(serverResponse){
+        $('.message_box').html(serverResponse)
+        console.log("Received this from server: ", serverResponse)
+    }
+  })
+})
+
+  </script>
+
+
+
+</html>

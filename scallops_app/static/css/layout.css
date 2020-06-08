@@ -1,0 +1,221 @@
+body,div,h1,h2,h3,h4,h5,h6,ul,ol,li,form,fieldset,p{margin:0; padding:0;}
+img,fieldset{border:none;}
+body{
+	font:11px/13px "Tahoma", Arial, Helvetica, sans-serif; background:url("../images/bg-registration-form-2.jpg")}
+.clear{clear:both;}
+*{margin:0; padding:0}
+
+
+#layout{width:971px; margin:0 auto; padding-top:28px}
+
+
+#header.inner{background:url(../images/banner_inner.gif) no-repeat 0 44px}
+.logo{float:left; width:785px;}
+.logo img{float:left; width:auto; padding:0 0 0 62px}
+#header {
+	padding: 12px 16px 8px;
+	background-color: #81d8d0;
+	height: 90px;
+	width: 100%;
+  }
+  
+
+.form_container{
+	min-width: 850px;
+    min-height: 110px;
+    margin: auto;
+    padding-top: 68px;
+    padding-bottom: 48px;
+    
+}
+
+.form_container h4{float:left; width:262px; font:24px/26px "ZapfHumnst BT", Arial, Helvetica, sans-serif; background:url(../images/search_border.gif) no-repeat 64px bottom; color:#454545; padding:47px 0 0 64px}
+
+.search{float:left; width:264px; padding:20px 0 0 60px}
+.search .search_row{float:left; width:264px; padding-bottom:7px}
+.search .search_row.last{float:left; width:264px; padding:5px 0 0 0}
+.search .search_row .search_column_1{float:left; width:72px; padding:0 0 0 10px}
+.search .search_row .search_column_2{float:left; width:182px}
+
+.search form{float:left; width:264px;}
+.search fieldset{float:left; width:262px; border:none; margin:0; padding:0 0 24px 0}
+.search label{float:left; width:auto; font-size:9px; line-height:11px; color:black; padding:5px 5px 0 5px}
+.search label.check{float:left; width:auto; font-size:9px; line-height:11px; color:black; padding:4px 8px 0 9px; margin:0}
+.search input{float:left; width:90px; font-size:11px; line-height:13px; color:#216588; margin:0; padding:0}
+.search input.checkbox{float:left; width:auto; border:none; height:15px; padding:0; margin:2px 0 0 0}
+.search input.search_btn{float:left; width:auto; padding:0; margin:0 0 0 0}
+.search select{float:left; width:60px; height:19px; font-size:9px}
+.search select.gender{float:left; width:60px;}
+.search select.date{float:left; width:171px;}
+.search select.dob{float:left; width:55px; font-size:10px; margin:0 3px 0 0}
+
+
+.welcome_msg{float:left; width:600px}
+.welcome_msg h1{float:left; width:560px; font:24px/26px "ZapfHumnst BT", Arial, Helvetica, sans-serif; color:black; padding:79px 0 17px 40px}
+.welcome_msg p{float:left; width:285px; color:black; padding:0 0 0 39px}
+.welcome_msg p.more{width:500px; color:#ffffbe; font-weight:bold; padding:13px 0 0 39px}
+.welcome_msg p.more a{color:#ffffbe; text-decoration:none; padding:0}
+.welcome_msg p.more a:hover{color:#ffffbe; text-decoration:underline;}
+
+
+.links{float:left; width:971px; height:34px; background:#f3f4f7; padding:14px 0 0 0}
+.links .free_registration{float:left; width:377px;}
+.links .free_registration h3{float:left; width:auto; font:18px/20px "Erasmus", Arial, Helvetica, sans-serif; color:#666666; padding:0 0 0 130px; position:relative}
+.links .free_registration h3 img{float:none; width:auto; vertical-align:middle; position:absolute; left:60px; top:-37px; padding:0 0 0 0}
+.links .free_registration h3 a{ color:#666666; text-decoration:none}
+.links .free_registration h3 a:hover{color:#9f2f2d; text-decoration:underline}
+.links .free_registration h3 a.current{ color:#9f2f2d; text-decoration:none}
+.links .free_profile{float:left; width:313px;}
+.links .free_profile h3{float:left; width:auto; font:18px/20px "Erasmus", Arial, Helvetica, sans-serif; color:#666666; padding:0 0 0 70px; position:relative}
+.links .free_profile h3 img{float:none; width:auto; vertical-align:middle; position:absolute; left:0; top:-34px; padding:0 0 0 0}
+.links .free_profile h3 a{ color:#666666; text-decoration:none}
+.links .free_profile h3 a:hover{color:#9f2f2d; text-decoration:underline}
+.links .free_profile h3 a.current{ color:#9f2f2d; text-decoration:none}
+.links .life_partner{float:left; width:281px;}
+.links .life_partner h3{float:left; width:auto; font:18px/20px "Erasmus", Arial, Helvetica, sans-serif; color:#666666; padding:0 0 0 65px; position:relative}
+.links .life_partner h3 img{float:none; width:auto; vertical-align:middle; position:absolute; left:0; top:-36px; padding:0 0 0 0}
+.links .life_partner h3 a{ color:#666666; text-decoration:none}
+.links .life_partner h3 a:hover{color:#9f2f2d; text-decoration:underline}
+.links .life_partner h3 a.current{ color:#9f2f2d; text-decoration:none}
+
+
+#menu{float:left; width:971px; height:70px; background-color:#81d8d0}
+#menu ul{float:right; width:936px; list-style:none; margin:0; padding:12px 0 0 35px}
+#menu li{float:left; width:auto; font:18px/20px "ZapfHumnst BT", Arial, Helvetica, sans-serif; color:#fff; padding:10px 27px 20px 27px; background:url(../images/menu_border.gif) no-repeat 0 0}
+#menu li a{color:#fff; text-decoration:none;}
+#menu li a:hover{color:#fff; text-decoration:underline;}
+#menu li a.current{color:#fff; text-decoration:none}
+#menu li.first{background:none; padding:10px 27px 0 64px}
+#menu li.last{background:none; background:url(../images/menu_border.gif) no-repeat 0 2px; padding:10px 0 27px 27px}
+
+
+
+#body_container{float:left; width:971px}
+
+.detail_container{float:left; width:971px; padding-top:15px}
+.detail_box{float:left; width:971px; background:url(../images/middle_curve.gif) repeat-y 0 0;}
+.top_curve{float:left;width:971px; background:url(../images/top_curve.gif) no-repeat 0 0}
+.detail_content{float:left; width:971px; background: #81d8d0}
+.detail_content .box_1{floaT:left; width:386px}
+.detail_content .box_1 h2{
+	float:left;
+	width:341px;
+	font:26px/28px "ZapfHumnst BT", Arial, Helvetica, sans-serif;
+	color:black;
+	padding:34px 0 18px 44px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+.detail_content .box_1 p{float:left; width:341px; color:black; padding:0 0 11px 44px}
+.detail_content .box_2{floaT:left; width:160px}
+.detail_content .box_2 img{float:left; width:auto; padding:3px 0 0 0;}
+.detail_content .box_3{floaT:left; width:425px}
+.detail_content .box_3 h2{
+	float:left;
+	width:339px;
+	font:26px/28px "ZapfHumnst BT", Arial, Helvetica, sans-serif;
+	color:#ffdac4;
+	padding:34px 0 18px 33px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+.detail_content .box_3 ul{float:left; width:425px; list-style:none; padding:0 0 35px 0}
+.detail_content .box_3 li{float:left; width:365px; color:#d2d2d2; background:url(../images/bullet.gif) no-repeat 36px 3px; padding:0 0 10px 60px}
+
+.profile_container{float:left; width:971px; padding-top:15px}
+.profile_box{float:left; width:971px; background:url(../images/middle_curve_1.gif) repeat-y 0 0;}
+.profile_top_curve{float:left;width:971px; background:url(../images/top_curve_1.gif) no-repeat 0 0}
+.profile_detail_content{float:left; width:971px; background: #81d8d0}
+input.button {
+background:#414141 none repeat scroll 0 0;
+border:1px solid #000000;
+color:#FFFFFF;
+font-family:Arial,Helvetica,sans-serif;
+font-size:11px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:bold;
+line-height:normal;
+margin:0 5px 5px 0;
+padding:10px;
+text-decoration:none;
+}
+
+img.service-img{float:left;
+				margin-right:10px;
+				margin-bottom:10px;
+				}
+.profile_detail_content .heading{float:left; width:971px; background:url(../images/title_bg.gif) no-repeat 27px 18px}
+.profile_detail_content .heading h3{float:left; width:500px; font:18px/20px "ZapfHumnst BT", Arial, Helvetica, sans-serif; color:#fff; padding:22px 0 8px 45px}
+.profile_detail_content .heading h4{float:left; width:370px; text-align:right; font:18px/20px "ZapfHumnst BT", Arial, Helvetica, sans-serif; color:#fff; padding:22px 30px 8px 0}
+.profile_detail_content .heading h4 a{color:#fff; text-decoration:none}
+.profile_detail_content .heading h4 a:hover{color:#fff; text-decoration:underline}
+
+.profile_detail_content .detail_box{float:left; width:923px; background:url(../images/horizontal_border.gif) no-repeat 48px 152px; padding:0 0 30px 48px}
+.profile_detail_content .detail_box .column{float:left; width:218px; background:url(../images/border_vertical.gif) no-repeat right 17px; padding:0 0 0 0; position:relative}
+.profile_detail_content .detail_box .column img.more{float:left; width:auto; padding:0 0 0 0; position:absolute; left:113px; top:146px}
+.profile_detail_content .detail_box .column.last{background:none}
+.profile_detail_content .detail_box .column .photo{float:left; width:120px;}
+.profile_detail_content .detail_box .column .photo img{float:left; width:auto; padding:0 0 1px 0}
+.profile_detail_content .detail_box .column .self_detail{float:left; width:98px; padding:28px 0 0 0}
+.profile_detail_content .detail_box .column .self_detail p{float:left; width:98px; font-weight:bold; font-size:10px; line-height:13px; color:#000; padding:0 0 0 0}
+.profile_detail_content .detail_box .column .self_detail p span{font-weight:normal; padding:0 0 0 0}
+
+
+#footer{float:left; width:971px; padding:30px 0 60px 0}
+#footer .footer_link{float:left; width:971px; padding:13px 0 0 0;}
+#footer .footer_link ul{width:971px; text-align:center; list-style:none; margin:0; padding:0 0 22px 0}
+#footer .footer_link li{ color:#d2d2d2; background:url(../images/footer_menu_border.gif) no-repeat 0 2px; display:inline; padding:0 5px 0 9px}
+#footer .footer_link li.first{background:none; padding:0 5px 0 5px}
+#footer .footer_link li a{color:#d2d2d2; text-decoration:none}
+#footer .footer_link li a:hover{color:#d2d2d2; text-decoration:underline}
+#footer .footer_link li a.current{color:#d2d2d2; text-decoration:underline}
+
+
+
+
+
+/***** inner page css starts *****/
+
+#body_container_inner{float:left; width:944px; background: url(../images/body_container_bg.gif) repeat-y 0 0; padding:20px 0 20px 0}
+#left_container_inner{float:left; width:200px; padding:0 0 0 0}
+#right_container_inner{float:left; width:700px; padding:20px 0 20px 0}
+
+
+
+
+h1{font:24px/26px Georgia, "Times New Roman", Times, serif; color:#221E21; font-style:italic; padding:20px 0 22px 0; margin:0}
+h1 span{color:#221E21}
+h1.inner{font:24px/26px Georgia, "Times New Roman", Times, serif; color:#221E21; font-style:italic; padding:0; margin:0}
+
+a{color:white; text-decoration:none;}
+a:hover{color:black}
+a:hover.supports{color:#000; text-decoration:none;}
+
+.welcomezone{padding:30px 40px 25px 40px;}
+
+/* Text Styles Start Here */
+.blueboldheading{font:bold 29px Kozuka Gothic Pro, Myriad Pro, Arial, Helvetica, sans-serif;color:#92BBEB;padding:0 0px 15px 0px;margin:0px 0px 0px 0px;}
+.whitelightheading {font:29px Kozuka Gothic Pro, Myriad Pro, Arial, Helvetica, sans-serif;font-weight:100;color:#ffffff;margin:0px;	padding:0px;}
+/* Text Styles End Here */
+
+.project-img{float:right; margin-left:20px; border: 6px solid #ccc;}
+.project-img_1{float:right; margin-left:20px; border: 6px solid #ccc; margin-top:20px}
+.row2{padding:10px 40px 40px 40px;}
+.box1{width:45%; float:left; padding:5px;}
+.about-img{float:left; margin-right:20px;}
+/* 	Inside Page Design  */
+p{line-height:15px; text-align:justify}
+.box2{width:45%; float:left;padding:5px;margin-left:5%}
+h2{font:bold 13px Arial, Helvetica, sans-serif;	color:#221E21; padding:0px 0px 5px 0px;	border-bottom:1px dotted #d8d6ba;margin:0px 0px 0 0px;}
+h3{font:bold 13px Arial, Helvetica, sans-serif;	color:#221E21; padding:0px 0px 5px 0px;	margin:0px;}
+.blog-posted-row{background:url(../images/body_container_bg.gif) repeat-y 0 0; padding:3px;}
+/* 	Inside Page Design  */
+textarea{width:322px}
+/***** inner page css ends *****/
