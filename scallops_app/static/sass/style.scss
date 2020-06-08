@@ -18,6 +18,21 @@
   src: url('../fonts/muli/Muli-Bold.ttf');
 }
 
+@font-face {
+  font-family: 'Couture Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Couture Bold'), url('../fonts/couture/couture-bld.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Couture Bold Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Couture Bold Italic'), url('../fonts/couture/couture-bldit.woff') format('woff');
+}
+
 *,
 *::after,
 *::before {
@@ -31,18 +46,22 @@
 
 html {
   //NOTE: This defines what 1rem is
-  font-size: 62.5%;
+  font-size: 16px;
+
 }
 
 body {
-  font-family: "Muli-Regular";
+  font-family: "Couture Bold";
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 input,
 textarea,
 select,
 button {
-  font-family: "Muli-Regular";
+  font-family: "Couture Bold";
   color: #333;
   font-size: 13px;
 }
@@ -69,6 +88,7 @@ ul {
 
 a:hover {
   text-decoration: none;
+  color: $primary;
 }
 
 :focus {
@@ -89,6 +109,7 @@ a:hover {
   padding-top: 68px;
   padding-bottom: 48px;
   background: url('../images/hands.jpg');
+  opacity: .85;
   background-size: cover;
 }
 
