@@ -1,20 +1,31 @@
-<!doctype html>
-  {% load static %}
+<!DOCTYPE html>
+{% load static %}
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     <title>{% block title %}Scallop Dating Website{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/_bootswatch.css' %}" />
     {% block stylesheet %}
     <style>
-      header {
+      .header {
         background-color: #81d8d0;
+        height: 100%;
+        width: 100%;
       }
-      .column{
+      .column {
         background-color: #fff;
         display: inline-flex;
         flex-direction: column;
@@ -22,22 +33,31 @@
         align-items: center;
       }
     </style>
-      {% endblock %}
-
+    {% endblock %}
   </head>
   <body>
-    <header>        
+    <header class="header">
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <img src='{%static "images/scallop2.png"%}' style="width: 3%;" alt="" />
         <a class="navbar-brand" href="/">Scallop</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarColor01"
+          aria-controls="navbarColor01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
-      
+
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/"
+                >Home <span class="sr-only">(current)</span></a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/1on1/">1on1</a>
@@ -48,15 +68,29 @@
             <li class="nav-item">
               <a class="nav-link" href="/game/">Game</a>
             </li>
-            
           </ul>
-          <form class="form-inline my-2 my-lg-0"  >
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+          <form class="form-inline my-2 my-lg-0">
+            <input
+              class="form-control mr-sm-2"
+              type="text"
+              placeholder="Search"
+              name="search"
+            />
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+              Search
+            </button>
           </form>
           <ul class="nav justify-content-end">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ user.first_name  }}</a>
+              <a
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >{{ user.first_name }}</a
+              >
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/profile/">Profile</a>
                 <a class="dropdown-item" href="#">Likes</a>
@@ -67,21 +101,22 @@
                 <a class="dropdown-item" href="/logout/">Log out</a>
               </div>
             </li>
-
           </ul>
-
-          
         </div>
-        
       </nav>
-      
-      </header>
+    </header>
     <main>
       <div class="container">
         {% block content %}
         <div id="layout">
           <div id="header">
-            <div class="logo"><img src='{%static "images/scallop2.png"%}' style="width: 15%;" alt="" /></div>
+            <div class="logo">
+              <img
+                src='{%static "images/scallop2.png"%}'
+                style="width: 15%;"
+                alt=""
+              />
+            </div>
             <div class="form_container">
               <h4>Intimate Search</h4>
               <div class="search">
@@ -92,10 +127,8 @@
                     </div>
                     <div class="search_column_2">
                       <select class="gender">
-                        <option>Male</option>                
+                        <option>Male</option>
                         <option>Female</option>
-    
-    
                       </select>
                       <label>Seeking a</label>
                       <select class="gender">
@@ -117,11 +150,15 @@
                       </select>
                     </div>
                   </div>
-                  
+
                   <div class="search_row last">
                     <div class="search_column_1">&nbsp;</div>
                     <div class="search_column_2">
-                      <input type="image" src='{%static "images/search_btn.gif"%}' class="search_btn"/>
+                      <input
+                        type="image"
+                        src='{%static "images/search_btn.gif"%}'
+                        class="search_btn"
+                      />
                     </div>
                   </div>
                 </form>
@@ -135,61 +172,95 @@
                     <div class="detail_content">
                       <div class="box_1">
                         <h2>Don’t Stay Alone</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis cursus tortor. Nunc consectetuer diam ac odio. Pellentesque vel mauris sit amet urna malesuada ornare. Curabitur venenatis est eget arcu. Donec vestibulum. Proin rutrum. Morbi commodo fringilla orci.</p>
-                        <p> Vivamus hendrerit aliquam quam. Curabitur placerat eros vitae libero. Fusce sagittis commodo purus. Cras orci. Quisque at justo. Quisque ullamcorper feugiat ligula. </p>
+                        <p>
+                          Lorem ipsum dolor sit amet, consectetuer adipiscing
+                          elit. Duis cursus tortor. Nunc consectetuer diam ac
+                          odio. Pellentesque vel mauris sit amet urna malesuada
+                          ornare. Curabitur venenatis est eget arcu. Donec
+                          vestibulum. Proin rutrum. Morbi commodo fringilla
+                          orci.
+                        </p>
+                        <p>
+                          Vivamus hendrerit aliquam quam. Curabitur placerat
+                          eros vitae libero. Fusce sagittis commodo purus. Cras
+                          orci. Quisque at justo. Quisque ullamcorper feugiat
+                          ligula.
+                        </p>
                       </div>
-                      <div class="box_2"><img src='{%static "images/pic_2.gif"%}' alt="" /></div>
-                      <div class="box_3">
-                    </div> 
+                      <div class="box_2">
+                        <img src='{%static "images/pic_2.gif"%}' alt="" />
                       </div>
+                      <div class="box_3"></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="profile_container">
-                <div class="profile_box">
-                  <div class="profile_top_curve">
-                    <div class="profile_detail_content">
-                      <div class="heading">
-                        <h3>Last added profiles</h3>
-                        <h4><a href="#">next </a> | <a href="#">prev</a></h4>
-                      </div>
+            </div>
+            <div class="profile_container">
+              <div class="profile_box">
+                <div class="profile_top_curve">
+                  <div class="profile_detail_content">
+                    <div class="heading">
+                      <h3>Last added profiles</h3>
+                      <h4><a href="#">next </a> | <a href="#">prev</a></h4>
+                    </div>
 
-                      
-                      <div class="detail_box">
-                        {% for user in all_users reversed %}
-                        <div class="column"><span class="photo"><a href="#"><img src='{%static "images/pic_3.gif"%}' alt="" /></a></span>
-                          <div class="self_detail">
-                            <ul>
-                              <li>Name: {{ user.first_name }} </li>
-                              <li>Born : {{user.birthday.year}}</li>
-                              <li>Sex: {{ user.gender }}</li>
-                              <li>Location: {{ user.city }} </li>
-                              <a href="#"><img src="{% static 'images/more_btn.gif'%}" alt="" class="more" /></a>
-                            </ul>
-                          </div>
+                    <div class="detail_box">
+                      {% for user in all_users reversed %}
+                      <div class="column">
+                        <span class="photo"
+                          ><a href="#"
+                            ><img
+                              src='{%static "images/pic_3.gif"%}'
+                              alt="" /></a
+                        ></span>
+                        <div class="self_detail">
+                          <ul>
+                            <li>Name: {{ user.first_name }}</li>
+                            <li>Born : {{user.birthday.year}}</li>
+                            <li>Sex: {{ user.gender }}</li>
+                            <li>Location: {{ user.city }}</li>
+                            <a href="#"
+                              ><img
+                                src="{% static 'images/more_btn.gif'%}"
+                                alt=""
+                                class="more"
+                            /></a>
+                          </ul>
                         </div>
-                        {% endfor %}
                       </div>
-
-            {% endblock %}
+                      {% endfor %}
                     </div>
+
+                    {% endblock %}
                   </div>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
-                
     </main>
     <footer>
       ...
     </footer>
 
     <script src="{% static 'js/app.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
     {% block javascript %}{% endblock %}
   </body>
 </html>
