@@ -117,8 +117,8 @@ $form-group-margin-bottom: 30px !default;
 }
 
 // Import 
-@import 'bootstrap/mixins';
-@import 'bootstrap/variables';
+@import './bootstrap/mixins';
+@import './bootstrap/variables';
 
 // PAGES:
 // @import 'pages/login-and-reg';
@@ -126,7 +126,7 @@ $form-group-margin-bottom: 30px !default;
 
 //COMPONENTS:
 
-
+@import './components/datepicker';
 // /* =======================================================
 // *
 // * 	Template Style 

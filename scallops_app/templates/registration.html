@@ -9,6 +9,7 @@
     <!-- MATERIAL DESIGN ICONIC FONT -->
 
     <!-- STYLE CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/login-and-reg.css' %}" />
   </head>
@@ -17,7 +18,17 @@
     {% if messages %}
     <ul class="messages">
       {% for message in messages %}
-      <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+      <li
+        style="color: red;"
+        {%
+        if
+        message.tags
+        %}
+        class="{{ message.tags }}"
+        {%
+        endif
+        %}
+      >
         {{ message }}
       </li>
       {% endfor %}
@@ -113,6 +124,8 @@
 
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/login-and-reg.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
   </body>
   <!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
