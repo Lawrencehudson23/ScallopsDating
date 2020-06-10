@@ -451,6 +451,11 @@ figure {
                 background-size: cover;
                 background-position: center center;
                 min-height: 700px;
+                // &:hover {
+                //     cursor: pointer;
+                //     transform: scale(2);
+                //     transition: transform 6s cubic-bezier(.25, .45, .45, .95);
+                // }
 
             }
         }
@@ -2044,4 +2049,10 @@ figure {
     .js & {
         opacity: 0;
     }
+}
+
+.wrapper {
+    background-size: contain;
+    background-image: url(../images/hands.jpg);
+    background-repeat: no-repeat;
 }
