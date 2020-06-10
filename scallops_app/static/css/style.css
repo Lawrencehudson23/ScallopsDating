@@ -1,4 +1,19 @@
 @font-face {
+  font-family: "ElMessiri-SemiBold";
+  src: url("../fonts/el_messiri/ElMessiri-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: url("../fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat-SemiBold";
+  src: url("../fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
   font-family: 'icomoon';
   src: url("../fonts/icomoon/icomoon.eot?srf3rx");
   src: url("../fonts/icomoon/icomoon.eot?srf3rx#iefix") format("embedded-opentype"), url("../fonts/icomoon/icomoon.ttf?srf3rx") format("truetype"), url("../fonts/icomoon/icomoon.woff?srf3rx") format("woff"), url("../fonts/icomoon/icomoon.svg?srf3rx#icomoon") format("svg");
@@ -6,11 +21,6 @@
   font-style: normal;
 }
 
-/* =======================================================
-*
-* 	Template Style 
-*
-* ======================================================= */
 body {
   font-family: "Playfair Display", serif;
   font-weight: 400;
@@ -1918,10 +1928,4 @@ figure {
 
 .js .animate-box {
   opacity: 0;
-}
-
-.wrapper {
-  background-size: contain;
-  background-image: url(../images/hands.jpg);
-  background-repeat: no-repeat;
 }
