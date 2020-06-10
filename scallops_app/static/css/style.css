@@ -1919,3 +1919,9 @@ figure {
 .js .animate-box {
   opacity: 0;
 }
+
+.wrapper {
+  background-size: contain;
+  background-image: url(../images/hands.jpg);
+  background-repeat: no-repeat;
+}
