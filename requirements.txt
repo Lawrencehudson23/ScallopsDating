@@ -6,9 +6,8 @@ pylint==2.4.4
 six==1.12.0
 typed-ast==1.4.0
 wrapt==1.11.2
-<<<<<<< HEAD
-=======
+
 channels==2.4.0
 Twisted==20.3.0
 channels-redis==2.4.2
->>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
+
