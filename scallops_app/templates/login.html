@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>RegistrationForm_v2 by Colorlib</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8" />
+    <title>registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<!-- MATERIAL DESIGN ICONIC FONT -->
-		<link rel="stylesheet" href="{% static 'fonts/material-design-iconic-font/css/material-design-iconic-font.min.css' %}">
-		
-		<!-- STYLE CSS -->
-		<link rel="stylesheet" href="{% static '/css/style.css' %}">
-	</head>
+    <!-- MATERIAL DESIGN ICONIC FONT -->
 
-	<body>
-		{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-				<li {% if message.tags %} class="{{ message.tags }}" {% endif %}> {{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+    <link
+      rel="stylesheet"
+      href="{% static 'fonts/material-design-iconic-font/css/material-design-iconic-font.min.css' %}"
+    />
 
-		<div class="wrapper" style="background-image: url('{% static "images/bg-registration-form-2.jpg" %});">
-			<div class="inner">
-				<form action="/process/login/" method="POST">
-					{% csrf_token %}
-					<h3>Login Form</h3>
-					<div class="form-group">
+    <!-- STYLE CSS -->
 
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
 
-					</div>
-					<div class="form-wrapper">
-						<label for="">Email</label>
-						<input type="text" class="form-control" name="login_email">
-					</div>
-					<div class="form-wrapper">
-						<label for="">Password</label>
-						<input type="password" class="form-control" name="login_password">
-					</div>
+    <link rel="stylesheet" href="{% static 'css/login-and-reg.css' %}" />
+  </head>
 
-					<div class="checkbox">
-						<label>
-							<a href="/registration/">Forgot Password?</a> | <a href="/registration/">Not a Member?</a>
+  <body>
+    <div class="wrapper">
+      <div class="inner">
+        <div class="image-holder">
+          <img src="{% static 'images/registration-form-4.jpg' %}" alt="" />
+        </div>
+        <form action="/process/login/" method="POST">
+          {% csrf_token %}
+          <h3>Sign In</h3>
 
+          <div class="form-holder active">
+            <input
+              type="text"
+              placeholder="e-mail"
+              class="form-control"
+              name="login_email"
+            />
+          </div>
+          <div class="form-holder">
+            <input
+              type="password"
+              placeholder="Password"
+              class="form-control"
+              style="font-size: 15px;"
+              name="login_password"
+            />
+          </div>
+          <div class="checkbox"></div>
+          <div class="form-login">
+            <button>Sign In</button>
+            <p>Not A Member? <a href="/registration">Registration</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
 
-						</label>
-					</div>
-					<button>Login</button>
-				</form>
-			</div>
-		</div>
-		
-	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/login-and-reg.js' %}"></script>
+  </body>
+  <!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

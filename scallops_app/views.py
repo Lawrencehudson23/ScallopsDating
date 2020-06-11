@@ -47,7 +47,6 @@ def process_registration(request):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-
         return redirect('/registration/')
     else:
         password = request.POST["password"]
