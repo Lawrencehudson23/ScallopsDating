@@ -31,6 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+<<<<<<< HEAD
+=======
+    'channels',
+>>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +74,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'dating_project.wsgi.application'
+<<<<<<< HEAD
+=======
+ASGI_APPLICATION = 'dating_project.routing.application'
+>>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
 
 
 # Database
@@ -79,6 +87,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+<<<<<<< HEAD
+=======
+        'TEST': {
+            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')
+        }
+>>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
     }
 }
 
@@ -122,4 +136,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
+<<<<<<< HEAD
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+=======
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# mysite/settings.py
+# Channels
+CHANNEL_LAYERS =  {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+>>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
