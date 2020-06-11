@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from django.test import TestCase
-
-# Create your tests here.
-=======
 # chat/tests.py
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
@@ -97,4 +92,3 @@ class ChatTests(ChannelsLiveServerTestCase):
     @property
     def _chat_log_value(self):
         return self.driver.find_element_by_css_selector('#chat-log').get_property('value')
->>>>>>> 3443a3c81ad3c327fd0d50c2a855defb92cdd480
