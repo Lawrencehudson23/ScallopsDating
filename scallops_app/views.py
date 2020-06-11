@@ -47,7 +47,6 @@ def process_registration(request):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        
         return redirect('/registration/')
     else:
         password = request.POST["password"]
@@ -56,7 +55,6 @@ def process_registration(request):
 
         request.session['user_id'] = user.id
         request.session['user_first'] = user.first_name
-        print('password dont match==>',messages.last_name)
         return redirect('/')
 
 
