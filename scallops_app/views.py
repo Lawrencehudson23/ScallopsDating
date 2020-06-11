@@ -228,11 +228,21 @@ def dislike(request):
 
 def ajax_like(request):
     
-
+    logged_user = User.objects.get(id=request.session["user_id"])
     context = {
         'all_messages' : logged_user.messages.all(),
         "logged_user": logged_user,
     }
     return render(request, 'ajax_message.html',context)
+
+
+#**********NEW CODE*****************
+def chat_index(request):
+    return render(request,'chat/index.html', {})
+
+def room(request, room_name):
+    return render(request, 'chat/room.html', {
+        'room_name': room_name
+    })
 
 
