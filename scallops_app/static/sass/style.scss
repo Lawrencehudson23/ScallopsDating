@@ -5,6 +5,7 @@ $font-secondary: 'Playfair Display',
 serif;
 
 
+
 // Overrides
 $grid-gutter-width: 40px !default;
 $border-radius-base: 4px !default;
@@ -74,6 +75,21 @@ $form-group-margin-bottom: 30px !default;
 }
 
 @font-face {
+    font-family: "ElMessiri-SemiBold";
+    src: url('../fonts/el_messiri/ElMessiri-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-Regular";
+    src: url('../fonts/montserrat/Montserrat-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Montserrat-SemiBold";
+    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf');
+}
+
+@font-face {
     font-family: 'icomoon';
     src: url('../fonts/icomoon/icomoon.eot?srf3rx');
     src: url('../fonts/icomoon/icomoon.eot?srf3rx#iefix') format('embedded-opentype'),
@@ -101,17 +117,21 @@ $form-group-margin-bottom: 30px !default;
 }
 
 // Import 
-@import 'bootstrap/mixins';
-@import 'bootstrap/variables';
+@import './bootstrap/mixins';
+@import './bootstrap/variables';
+
+// PAGES:
+// @import 'pages/login-and-reg';
 
 
+//COMPONENTS:
 
-
-/* =======================================================
-*
-* 	Template Style 
-*
-* ======================================================= */
+@import './components/datepicker';
+// /* =======================================================
+// *
+// * 	Template Style 
+// *
+// * ======================================================= */
 
 body {
     font-family: $font-secondary;
@@ -451,6 +471,11 @@ figure {
                 background-size: cover;
                 background-position: center center;
                 min-height: 700px;
+                // &:hover {
+                //     cursor: pointer;
+                //     transform: scale(2);
+                //     transition: transform 6s cubic-bezier(.25, .45, .45, .95);
+                // }
 
             }
         }
