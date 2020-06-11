@@ -227,6 +227,7 @@ def dislike(request):
 
 def ajax_like(request):
     
+    logged_user = User.objects.get(id=request.session["user_id"])
 
     context = {
         'all_messages' : logged_user.messages.all(),
