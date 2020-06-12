@@ -51,8 +51,6 @@ def display_registration(request):
     return render(request, 'registration.html')
 
 def process_registration(request):
-
-    
     errors = User.objects.user_validator(request.POST)
     # realErrors=json.dumps(errors)
     # # print(realErrors['first_name'])
