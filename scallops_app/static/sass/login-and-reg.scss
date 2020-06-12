@@ -1,18 +1,3 @@
-@font-face {
-    font-family: "ElMessiri-SemiBold";
-    src: url('../../fonts/el_messiri/ElMessiri-SemiBold.ttf');
-}
-
-@font-face {
-    font-family: "Montserrat-Regular";
-    src: url('../../fonts/montserrat/Montserrat-Regular.ttf');
-}
-
-@font-face {
-    font-family: "Montserrat-SemiBold";
-    src: url('../../fonts/montserrat/Montserrat-SemiBold.ttf');
-}
-
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -45,7 +30,6 @@ ul {
     padding-left: 0;
     margin-bottom: 0;
 }
-
 a {
     text-decoration: none;
     color: #ff9a9c;
