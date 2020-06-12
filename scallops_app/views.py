@@ -8,6 +8,8 @@ from django.core.files.storage import FileSystemStorage
 import random
 from django.http import JsonResponse
 
+
+import json
 # Create your views here.
 def index(request):
     if "user_id" not in request.session:
@@ -18,6 +20,7 @@ def index(request):
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
     }
     return render(request,'base.html', context)
+
 def display_about_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
@@ -27,6 +30,13 @@ def display_about_us(request):
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
     }
     return render(request,'about_us.html',context)
+
+def display_single(request):
+    if "user_id" not in request.session:
+        return redirect("/login/")
+    return render(request,'single.html')
+    
+
 def display_contact_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
@@ -37,16 +47,20 @@ def display_contact_us(request):
     }
     return render(request,'contact_us.html',context)
 def display_registration(request):
-
+    
     return render(request, 'registration.html')
 
 def process_registration(request):
-
     errors = User.objects.user_validator(request.POST)
-    
+    # realErrors=json.dumps(errors)
+    # # print(realErrors['first_name'])
+    # print(realErrors)
+    # print(json.dumps(errors["first_name"]))
+
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
+            
         return redirect('/registration/')
     else:
         password = request.POST["password"]
