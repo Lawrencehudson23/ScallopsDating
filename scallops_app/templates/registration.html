@@ -30,32 +30,29 @@
   </head>
 
   <body>
-    {{ errors.first_name}}
-
-    <br />
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li
-        style="color: red;"
-        {%
-        if
-        message.tags
-        %}
-        class="{{ message.tags }}"
-        {%
-        endif
-        %}
-      >
-        {{ message }}
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
     <div class="wrapper">
       <div class="inner">
         <div class="image-holder">
           <img src="{% static 'images/registration-form-4.jpg' %}" alt="" />
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+            <li
+              style="color: red;"
+              {%
+              if
+              message.tags
+              %}
+              class="{{ message.tags }}"
+              {%
+              endif
+              %}
+            >
+              {{ message }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
         </div>
         <form action="/register/" method="POST">
           {% csrf_token %}
