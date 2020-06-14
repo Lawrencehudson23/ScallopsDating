@@ -102,16 +102,16 @@ class User(models.Model):
     def __repr__(self):
        return self.__str__()
 
-class Like(models.Model):
-    likes = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
-    liked_by = models.ForeignKey(User, related_name="liked_by", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Like(models.Model):
+#     likes = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
+#     liked_by = models.ForeignKey(User, related_name="liked_by", on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Match(models.Model):
-    user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Match(models.Model):
+#     user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
+#     user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 #creating model for messaging
 # class Message(models.Model):
@@ -141,17 +141,22 @@ class Profile(models.Model):
 #     interest = models.TextField()
 #     goals = models.TextField()
 
-class Game(models.Model):
-    option1 = models.CharField(max_length=1000)
-    option2 = models.CharField(max_length=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Game(models.Model):
+#     option1 = models.CharField(max_length=1000)
+#     option2 = models.CharField(max_length=1000)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 class Message(models.Model):
-    message = models.TextField()
-    user = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE)
-    match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
+    content = models.TextField()
+    author = models.ForeignKey(User, related_name="author_messages", on_delete=models.CASCADE)
+    # match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    # updated_at = models.DateTimeField(auto_now = True)
+    def __str__(self):
+        return self.author.first_name
+
+    def last_10_messages(self):
+        return Message.object.order_by('-created_at').all()[:10]
 
 
 
