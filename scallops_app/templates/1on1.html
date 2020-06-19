@@ -4,12 +4,9 @@
 {% load static %}
 
 {% block content %}
-<<<<<<< HEAD
 
 
 {% for user in all_users %}
-=======
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
 <div class="one">
     <form action="/next/" method="post">
         <fieldset>
@@ -17,7 +14,6 @@
     <button>pass</button>
     </form>
     <img src='{%static "images/pic_2.gif"%}' alt=""><br>
-<<<<<<< HEAD
     <label for="/like/">{{ user.first_name }} 22 yr old {{ user.city }}</label>
 
     <form action="/ajax/like" method="post">
@@ -28,14 +24,6 @@
 </div>
 {% endfor %}
 
-=======
-    <label for="/like/">Lora 22 yr old los angeles</label>
-    <form action="" method="post">
-    {% csrf_token %}
-    <button>like</button>
-</form>
-</fieldset>
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
 
     <!-- <div class="form-group">
     <div class="input-group mb-3">
@@ -50,7 +38,6 @@
   </div>
 </div> -->
 {% endblock %}
-<<<<<<< HEAD
 
 
 <script>
@@ -69,5 +56,3 @@
 })
 
   </script>
-=======
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a

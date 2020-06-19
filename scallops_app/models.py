@@ -153,7 +153,11 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
-
-
+# TODO: PICTURE
+# class Picture(models.Model):
+#     image = models.FileField(upload_to='profile', null=True)
+#     created_at = models.DateTimeField(auto_now_add = True)
+#     updated_at = models.DateTimeField(auto_now = True)
+#     user = models.ForeignKey(User, related_name='pictures', null=True,on_delete=models.CASCADE)
 
 
