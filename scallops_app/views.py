@@ -137,13 +137,6 @@ def display_1on1(request):
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
     }
     return render(request, '1on1.html',context)
-def like(request):
-    pass
-    return redirect('/1on1/')
-def dislike(request):
-    pass
-    return redirect('/1on1/')
-    return render(request, 'profile.html')
 
 def display_edit_profile(request):
     return render(request, 'edit_profile.html')
@@ -230,8 +223,12 @@ def display_1on1(request):
     }
     return render(request, '1on1.html',context)
 
+# TODO: LIKE DISLIKE
 def like(request):
-    pass
+    currentUser= User.objects.get(id=request.session['id'])
+    chooseUser=User.objects.get(id=request.session['chooseUser'])
+    newLikes=Like.objects.get(liked_by=currentUser).likes().append(chooseUser)
+    Like.objects.get(liked_by=currentUser, likes=newLikes)
     return redirect('/1on1/')
 def dislike(request):
     pass
