@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import random
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 import json
@@ -253,8 +254,12 @@ def chat_index(request):
     return render(request,'chat/index.html', {})
 
 def room(request, room_name):
-    return render(request, 'chat/room.html', {
-        'room_name': room_name
-    })
+    context = {
+        'room_name': room_name,
+        'user_id': request.session["user_id"],
+        'first_name':User.objects.get(id=request.session["user_id"]).first_name,
+        'last_name':User.objects.get(id=request.session["user_id"]).last_name,
+    }
+    return render(request, 'chat/room.html', context)
 
 
