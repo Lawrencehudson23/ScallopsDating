@@ -94,6 +94,8 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
+
     objects = UserManager()
 
     def __str__(self):
@@ -102,16 +104,30 @@ class User(models.Model):
     def __repr__(self):
        return self.__str__()
 
-# class Like(models.Model):
-#     likes = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
-#     liked_by = models.ForeignKey(User, related_name="liked_by", on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
+    def likes_list(self):
+        return self.likes.all()
+
+    def liked_by_list(self):
+        return self.liked_by.all()
+
+    def unlike(self, unliked_user_id):
+        user_id = self.id
+        unliked_user = User.objects.get(id=unliked_user_id)
+        self.likes.remove(unliked_user)
+        try:
+            match = Match.objects.filter(user1=self).filter(user2=unliked_user)
+            match.delete()
+            print("match deleted")
+        except:
+            match = Match.objects.filter(user1=unliked_user).filter(user2=self)
+            match.delete()
+            print("match deleted")
 
 
-# class Match(models.Model):
-#     user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
-#     user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
+class Match(models.Model):
+    user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 #creating model for messaging
 # class Message(models.Model):
@@ -149,9 +165,10 @@ class Profile(models.Model):
 class Message(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, related_name="author_messages", on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name="received_messages", on_delete=models.CASCADE, null=True)
     # match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
-    # updated_at = models.DateTimeField(auto_now = True)
+    updated_at = models.DateTimeField(auto_now = True)
     def __str__(self):
         return self.author.first_name
 
