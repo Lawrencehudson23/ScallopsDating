@@ -57,16 +57,19 @@
 		</div>
 		<div id="contacts">
 			<ul id="chat-log">
+				{% if matches %}
+				{% for match in matches %}
 				<li class="contact">
 					<div class="wrap">
 						<span class="contact-status online"></span>
 						<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
 						<div class="meta">
-							<p class="name">Louis Litt</p>
+							<p class="name">{{ match.user2.first_name }}</p>
 							<p class="preview">You just got LITT up, Mike.</p>
 						</div>
 					</div>
 				</li>
+				{% endfor %}
 				<li class="contact active">
 					<div class="wrap">
 						<span class="contact-status busy"></span>
@@ -77,6 +80,7 @@
 						</div>
 					</div>
 				</li>
+				{% endif %}
 			</ul>
 		</div>
 		<div id="bottom-bar">
@@ -121,8 +125,11 @@
 <script src="{% static 'js/reconnecting-websocket.js'%}"></script>
 	{{ room_name|json_script:"room-name" }}
 	{{ user_id| json_script:"user_id" }}
+	{{ match_id | json_script:"match_id" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
+		const user_id = JSON.parse(document.getElementById('user_id').textContent);
+		const match_id = JSON.parse(document.getElementById('match_id').textContent);
 
         const chatSocket = new ReconnectingWebSocket(
             'ws://'
@@ -130,6 +137,10 @@
             + '/ws/chat/'
             + roomName
             + '/'
+			+ user_id
+			+ '/'
+			+ match_id
+			+ '/'
 		);
 
 		chatSocket.onopen = function(e){

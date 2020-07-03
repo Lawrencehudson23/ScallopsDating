@@ -8,6 +8,7 @@ from django.core.files.storage import FileSystemStorage
 import random
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 import json
@@ -249,14 +250,22 @@ def ajax_like(request):
 def chat_index(request):
     return render(request,'chat/index.html', {})
 
-def room(request, room_name):
+def room(request, room_name, user_id):
     if "user_id" not in request.session:
         return redirect("/login/")
+    logged_user = User.objects.get(id=request.session['user_id'])
+    if logged_user.id != user_id:
+        return redirect('/login')
+    messages = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:10]
+    print(messages[0].match.id)
     context = {
         'room_name': room_name,
         'user_id': request.session["user_id"],
         'first_name':User.objects.get(id=request.session["user_id"]).first_name,
         'last_name':User.objects.get(id=request.session["user_id"]).last_name,
+        "matches":logged_user.match1.all(),
+        "messages": messages,
+        'match_id': messages[0].match.id
     }
     return render(request, 'chat/room.html', context)
 
