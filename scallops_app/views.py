@@ -223,9 +223,9 @@ def like(request):
     likedList = likedUser.likes.all()
     for user in likedList:
         if user == currentUser:
-            match = Match.objects.create(user1=currentUser, user2=likedUser)
+            currentUser.matches.add(likedUser)
             print('theres a match!')
-            messages.info(request,"You matched with "+ match.user2.first_name)
+            messages.info(request,"You matched with "+ likedUser.first_name)
             return redirect('/1on1/')
         
     return redirect('/1on1/')
