@@ -48,6 +48,7 @@ class ChatConsumer(WebsocketConsumer):
         session = self.scope['session']
         print("*********** USER " + str(session["user_id"]) + " CONNECTED *************")
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        # print(self.scope['url_route']['kwargs']['match_id'])
         self.room_group_name = 'chat_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
