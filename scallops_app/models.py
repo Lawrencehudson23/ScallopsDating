@@ -103,14 +103,14 @@ class User(models.Model):
        return self.__str__()
 
 class Like(models.Model):
+    user = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
     likes = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
-    liked_by = models.ForeignKey(User, related_name="liked_by", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Match(models.Model):
-    user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="users", on_delete=models.CASCADE)
+    matched_user = models.ForeignKey(User, related_name="matches", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 #creating model for messaging
@@ -130,6 +130,7 @@ class Profile(models.Model):
     interest = models.TextField(default = 'Nothing to display')
     goals = models.TextField(default = 'Nothing to display')
     updated_at = models.DateTimeField(auto_now_add=True)
+
 # class Profile(models.Model):
 #     image = models.ImageField(width_field=200px, height_field=400px)
 #     summary = models.TextField()
