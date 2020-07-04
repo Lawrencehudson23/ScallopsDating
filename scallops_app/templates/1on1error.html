@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title%}{% endblock %}
+{% load static %}
+
+{% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+    <div class="one">
+        <h1>
+            You have liked all scallops.
+        </h1>
+
+    </div>
+{% endblock %}

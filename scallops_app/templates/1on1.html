@@ -5,8 +5,15 @@
 
 {% block content %}
 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-{% for user in all_users %}
+
 <div class="one">
     <form action="/next/" method="post">
         <fieldset>
@@ -14,15 +21,15 @@
     <button>pass</button>
     </form>
     <img src='{%static "images/pic_2.gif"%}' alt=""><br>
-    <label for="/like/">{{ user.first_name }} 22 yr old {{ user.city }}</label>
+    <label for="/like/">{{ potential.first_name }} AGE {{ potential.city }}</label>
 
-    <form action="/ajax/like" method="post">
+    <form class="like" action="/like/" method="post">
     {% csrf_token %}
-    <button><input type="submit" value="LIKE"></button>
-</form>
+      <input type="hidden" name="liked" value="{{potential.id}}"/>
+      <input type="submit" value="LIKE"/>
+    </form>
 </fieldset>
 </div>
-{% endfor %}
 
 
     <!-- <div class="form-group">
@@ -39,20 +46,20 @@
 </div> -->
 {% endblock %}
 
-
+<!-- 
 <script>
-    $('form').submit(function(e){
+    $('.like').submit(function(e){
     e.preventDefault()
     console.log($(this).serialize())
     $.ajax({
-        url: '/ajax/like/',
+        url: '/like/',
         method: 'POST',
         data: $(this).serialize(),
         success: function(serverResponse){
-        $('.answer').html(serverResponse)
+        $('.one').html(serverResponse)
         console.log("Received this from server: ", serverResponse)
     }
   })
 })
 
-  </script>
+  </script> -->
