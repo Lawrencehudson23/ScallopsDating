@@ -5,7 +5,12 @@ from datetime import datetime
 class UserManager(models.Manager):
     def user_validator(self, post_Data):
         errors = {}
-
+        # if not 'formtype' in post_Data:
+        #     return False
+        # if post_Data['formtype']=='register':
+        #     user_data=User.objects.filter(email=post_Data['email'])
+        #     if not user_data:
+        #         pass
         if len(post_Data["first_name"]) < 2:
             errors["first_name"] = "First name must be longer than two letters"
         elif post_Data["first_name"].isalpha() == False:
@@ -15,6 +20,23 @@ class UserManager(models.Manager):
             errors["last_name"] = "Last name must be longer than two letters"
         elif post_Data["last_name"].isalpha() == False:
             errors["last_name"] = "Last name can only contain letters"
+        if not 'gender' in post_Data:
+            errors['gender']= " You must select a gender option."
+        if not 'city' in post_Data:
+            errors['city']= " You must select a city option."
+        if post_Data['birthday'] == '':
+                errors['birthday'] = 'You must enter a birthday.'
+                
+        elif post_Data['birthday'] != '':
+            current_date = (datetime.now())
+            birthday = datetime.strptime(post_Data['birthday'], "%Y-%m-%d")
+            days = current_date - birthday
+            if days.days < 6570 and days.days > 0:
+                errors['birthday'] = 'You must be 18 or older to sign up.'
+                
+            elif days.days < 0:
+                errors['birthday'] = 'You cannot select a date that has not occurred yet.'
+                    
         
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         if not EMAIL_REGEX.match(post_Data['email']):          
@@ -22,10 +44,42 @@ class UserManager(models.Manager):
         
         if len(post_Data["password"]) < 8:
             errors['password'] = "Password must have at least 8 characters"
-
-        if post_Data["password"] != post_Data["pass_confirm"]:
-            errors['pass_confirm'] = "Passwords do not match!"
+        if len(post_Data["pass_confirm"]) < 8:
+            errors['password'] = "Confirm Password must have at least 8 characters"
+        elif post_Data["password"] != post_Data["pass_confirm"]:
+            errors['password'] = "Password does not match confirmed password."
         
+        # elif post_Data['formtype'] == 'login':
+        #     user_data = User.objects.filter(email_address=post_Data['email_address'])
+        #     if not emailregex.match(post_Data['email_address']) and post_Data['email_address'] != '':
+        #         errors['email_address'] = 'Invalid email address.'
+                
+        #     elif not user_data and post_Data['email_address'] == '':
+        #          errors['email_address'] = 'Email field cannot be empty.'
+                 
+        #     elif not user_data:
+        #         errors['email_address'] = 'That email address does not exist.'
+                
+        #     user_data = User.objects.get(email_address=post_Data['email_address'])
+        #     password = bcrypt.checkpw(post_Data['password'].encode(), user_data.password.encode())
+        #     if len(post_Data['password']) <= 0:
+        #         errors['password'] = 'Password field cannot be empty.'
+                
+        #     elif post_Data['email_address'] != user_data.email_address or password != True:
+        #         errors['password'] = 'Your email and password do not match. Please try again.'
+                
+        # elif post_Data['formtype'] == 'update':
+        #     if post_Data['password'] == '':
+        #         return errors
+        #     else:
+        #         if len(post_Data['password']) < 9:
+        #             errors['password'] = 'Password must be more than 8 characters.'
+        #         elif len(post_Data['passwordcheck']) < 9:
+        #             errors['password'] = 'Confirmed password must be more than 8 characters.'
+                    
+        #         elif post_Data['password'] != post_Data['passwordcheck']:
+        #             errors['password'] = 'Password does not match password confirmation.'
+                    
         return errors
 
 # Create your models here.
@@ -40,6 +94,8 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
+
     objects = UserManager()
 
     def __str__(self):
@@ -48,10 +104,24 @@ class User(models.Model):
     def __repr__(self):
        return self.__str__()
 
-class Like(models.Model):
-    likes = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
-    liked_by = models.ForeignKey(User, related_name="liked_by", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    def likes_list(self):
+        return self.likes.all()
+
+    def liked_by_list(self):
+        return self.liked_by.all()
+
+    def unlike(self, unliked_user_id):
+        user_id = self.id
+        unliked_user = User.objects.get(id=unliked_user_id)
+        self.likes.remove(unliked_user)
+        try:
+            match = Match.objects.filter(user1=self).filter(user2=unliked_user)
+            match.delete()
+            print("match deleted")
+        except:
+            match = Match.objects.filter(user1=unliked_user).filter(user2=self)
+            match.delete()
+            print("match deleted")
 
 
 class Match(models.Model):
@@ -87,19 +157,29 @@ class Profile(models.Model):
 #     interest = models.TextField()
 #     goals = models.TextField()
 
-class Game(models.Model):
-    option1 = models.CharField(max_length=1000)
-    option2 = models.CharField(max_length=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Game(models.Model):
+#     option1 = models.CharField(max_length=1000)
+#     option2 = models.CharField(max_length=1000)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 class Message(models.Model):
-    message = models.TextField()
-    user = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE)
-    match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
+    content = models.TextField()
+    author = models.ForeignKey(User, related_name="author_messages", on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name="received_messages", on_delete=models.CASCADE, null=True)
+    # match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    def __str__(self):
+        return self.author.first_name
 
+    def last_10_messages(self):
+        return Message.object.order_by('-created_at').all()[:10]
 
-
+# TODO: PICTURE
+# class Picture(models.Model):
+#     image = models.FileField(upload_to='profile', null=True)
+#     created_at = models.DateTimeField(auto_now_add = True)
+#     updated_at = models.DateTimeField(auto_now = True)
+#     user = models.ForeignKey(User, related_name='pictures', null=True,on_delete=models.CASCADE)
 
 

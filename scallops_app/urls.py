@@ -14,15 +14,15 @@ urlpatterns = [
     path('profile/', views.display_profile),
     path('edit/profile/', views.display_edit_profile),
     path('process/profile/', views.process_profile),
-    path('1on1/', views.display_1on1),
     path('dislike/', views.dislike),
     path('like/', views.like),
     path('game/', views.display_game),
     path('ajax/game/', views.ajax_game),
-    path('ajax/message/', views.ajax_message),
     path('1on1/', views.display_1on1),
     path('dislike/', views.dislike),
     path('like/', views.like),
     path('ajax/like/', views.ajax_like),
-
+    path('chat/index/', views.chat_index),
+    path('chat/<str:room_name>/', views.room),
+    path('single/', views.display_single),
 ]

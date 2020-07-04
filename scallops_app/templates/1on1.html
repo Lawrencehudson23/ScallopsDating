@@ -4,12 +4,16 @@
 {% load static %}
 
 {% block content %}
-<<<<<<< HEAD
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 
-{% for user in all_users %}
-=======
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
 <div class="one">
     <form action="/next/" method="post">
         <fieldset>
@@ -17,25 +21,16 @@
     <button>pass</button>
     </form>
     <img src='{%static "images/pic_2.gif"%}' alt=""><br>
-<<<<<<< HEAD
-    <label for="/like/">{{ user.first_name }} 22 yr old {{ user.city }}</label>
+    <label for="/like/">{{ potential.first_name }} AGE {{ potential.city }}</label>
 
-    <form action="/ajax/like" method="post">
+    <form class="like" action="/like/" method="post">
     {% csrf_token %}
-    <button><input type="submit" value="LIKE"></button>
-</form>
+      <input type="hidden" name="liked" value="{{potential.id}}"/>
+      <input type="submit" value="LIKE"/>
+    </form>
 </fieldset>
 </div>
-{% endfor %}
 
-=======
-    <label for="/like/">Lora 22 yr old los angeles</label>
-    <form action="" method="post">
-    {% csrf_token %}
-    <button>like</button>
-</form>
-</fieldset>
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
 
     <!-- <div class="form-group">
     <div class="input-group mb-3">
@@ -50,24 +45,21 @@
   </div>
 </div> -->
 {% endblock %}
-<<<<<<< HEAD
 
-
+<!-- 
 <script>
-    $('form').submit(function(e){
+    $('.like').submit(function(e){
     e.preventDefault()
     console.log($(this).serialize())
     $.ajax({
-        url: '/ajax/like/',
+        url: '/like/',
         method: 'POST',
         data: $(this).serialize(),
         success: function(serverResponse){
-        $('.answer').html(serverResponse)
+        $('.one').html(serverResponse)
         console.log("Received this from server: ", serverResponse)
     }
   })
 })
 
-  </script>
-=======
->>>>>>> 8a3d2cced820725ca002b2cee16887fbc4ec810a
+  </script> -->

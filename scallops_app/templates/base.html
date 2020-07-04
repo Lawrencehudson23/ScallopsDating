@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>{% block title %}Scallop Dating Website{% endblock %}</title>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
 	<meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -59,7 +60,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3 col-xs-2">
-					<div id="fh5co-logo"><a href="base.html">Scallops.</a></div>
+					<div id="fh5co-logo"><a href="/">Scallops.</a></div>
 				</div>
 				<div class="col-md-6 col-xs-6 text-center menu-1">
 					<ul>
@@ -79,6 +80,7 @@
 								<li><a href="#">Other Games</a></li>
 							</ul>
 						</li>
+						<li><a href="/chat/hello">Chat</a></li>
 						<li><a href="/others">Others</a></li>
 					</ul>
 				</div>
@@ -261,7 +263,7 @@
 		  	</ul>
 	  	</div>
 	</aside>
-	 {% endblock %}
+	
 	<div id="fh5co-services" class="fh5co-bg-section">
 		<div class="container">
 			<div class="row">
@@ -313,13 +315,13 @@
 						<div class="product-grid" style="background-image:url({%static 'images/10.jpg' %});">
 							<div class="inner">
 								<p>
-									<a href="single.html" class="icon"><i class="icon-heart"></i></a>
-									<a href="single.html" class="icon"><i class="icon-eye"></i></a>
+									<a href="/single" class="icon"><i class="icon-heart"></i></a>
+									<a href="/single" class="icon"><i class="icon-eye"></i></a>
 								</p>
 							</div>
 						</div>
 						<div class="desc">
-							<h3><a href="single.html">Hauteville Concrete</a></h3>
+							<h3><a href="/single">Hauteville Concrete</a></h3>
 							<span class="price">los angeles 23</span>
 						</div>
 					</div>
@@ -542,7 +544,8 @@
 			</div>
 		</div>
 	</div>
-
+	{% endblock %}
+{% block footer %}
 	<footer id="fh5co-footer" role="contentinfo">
 		<div class="container">
 			<div class="row row-pb-md">
@@ -600,6 +603,7 @@
 
 		</div>
 	</footer>
+	{% endblock %}
 	</div>
 
 	<div class="gototop js-top">
