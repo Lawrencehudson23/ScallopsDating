@@ -1,6 +1,7 @@
 from django.db import models
 import re
 from datetime import datetime
+from django.db.models import Q
 
 class UserManager(models.Manager):
     def user_validator(self, post_Data):
@@ -95,6 +96,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
+    matches = models.ManyToManyField("self", related_name="matched_with")
 
     objects = UserManager()
 
@@ -114,20 +116,15 @@ class User(models.Model):
         user_id = self.id
         unliked_user = User.objects.get(id=unliked_user_id)
         self.likes.remove(unliked_user)
-        try:
-            match = Match.objects.filter(user1=self).filter(user2=unliked_user)
-            match.delete()
-            print("match deleted")
-        except:
-            match = Match.objects.filter(user1=unliked_user).filter(user2=self)
-            match.delete()
-            print("match deleted")
+        
+        self.matches.remove(unliked_user)
+        print("match deleted")
 
 
-class Match(models.Model):
-    user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Match(models.Model):
+#     user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
+#     user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 #creating model for messaging
 # class Message(models.Model):
@@ -173,7 +170,9 @@ class Message(models.Model):
         return self.author.first_name
 
     def last_10_messages(self):
-        return Message.object.order_by('-created_at').all()[:10]
+        return self.object.order_by('-created_at').all()[:10]
+
+   
 
 # TODO: PICTURE
 # class Picture(models.Model):

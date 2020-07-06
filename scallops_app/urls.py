@@ -23,6 +23,6 @@ urlpatterns = [
     path('like/', views.like),
     path('ajax/like/', views.ajax_like),
     path('chat/index/', views.chat_index),
-    path('chat/<str:room_name>/', views.room),
+    path('chat/<str:room_name>/<int:user_id>', views.room),
     path('single/', views.display_single),
 ]
