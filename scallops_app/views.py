@@ -16,6 +16,7 @@ import json
 def index(request):
     if "user_id" not in request.session:
         return redirect("/login/")
+    print("logged user is: "+ str(request.session["user_id"]))
 
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
@@ -96,6 +97,7 @@ def process_login(request):
         if bcrypt.checkpw(request.POST['login_password'].encode(), logged_user.password.encode()):
             request.session["user_id"] = logged_user.id
             request.session["user_first"] = logged_user.first_name
+            print("user id is: "+ str(logged_user.id))
             return redirect('/')
         else:
             messages.error(request, "Incorrect password")
@@ -256,16 +258,45 @@ def room(request, room_name, user_id):
     logged_user = User.objects.get(id=request.session['user_id'])
     if logged_user.id != user_id:
         return redirect('/login')
+    matches = logged_user.matches.all().order_by('-created_at').all()
+    print(matches[0])
     messages = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:10]
-    print(messages[0].match.id)
+    print(messages)
+    if len(messages)> 0:
+        newest_msg = messages[0]
+        if newest_msg.author.id == logged_user.id:
+            match = newest_msg.recipient
+        else:
+            match = newest_msg.author
+        # match1 = User.matches.through.objects.filter(from_user_id=newest_msg.author.id).filter(to_user_id=newest_msg.recipient.id)
+        # match2 = User.matches.through.objects.filter(from_user_id=newest_msg.recipient.id).filter(to_user_id=newest_msg.author.id)
+        if newest_msg.author.id<newest_msg.recipient.id:
+            room_id = str(newest_msg.author.id)+str(newest_msg.recipient.id)
+        else:
+            room_id = str(newest_msg.recipient.id)+str(newest_msg.author.id)   
+    elif len(matches)> 0: 
+        newest_msg = []
+        print(matches)
+        match = matches[0]
+        print(match)
+        if logged_user.id <match.id:
+            room_id = str(logged_user.id)+str(match.id)
+        else:
+            room_id = str(match.id)+str(logged_user.id) 
+    else:
+        return render(request, 'base.html')
+    # WHAT IF USER DOENST HAVE ANY MESSAGES YET
+    # AND WHAT IF THEY DONT HAVE ANY MATCHES EITHER
+       
     context = {
         'room_name': room_name,
         'user_id': request.session["user_id"],
         'first_name':User.objects.get(id=request.session["user_id"]).first_name,
         'last_name':User.objects.get(id=request.session["user_id"]).last_name,
-        "matches":logged_user.match1.all(),
+        "matches": matches,
+        "match_id": match.id,
         "messages": messages,
-        'match_id': messages[0].match.id
+        'room_id': room_id,
     }
     return render(request, 'chat/room.html', context)
 

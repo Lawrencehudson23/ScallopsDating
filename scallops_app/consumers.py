@@ -18,7 +18,8 @@ class ChatConsumer(WebsocketConsumer):
 
     def new_message(self, data):
         author_user = User.objects.get(id= self.scope["session"]["user_id"])
-        message = Message.objects.create(content=data['message'],author=author_user)
+        recipient = User.objects.get(id=data['to'])
+        message = Message.objects.create(content=data['message'],author=author_user, recipient = recipient)
         content = {
             'command' : 'new_message',
             'message' : self.message_to_json(message)
@@ -35,6 +36,7 @@ class ChatConsumer(WebsocketConsumer):
     def message_to_json(self, message):
         return {
             'author':message.author.id,
+            'recipient':message.recipient.id,
             'content':message.content,
             'created_at':str(message.created_at)
         }
@@ -47,8 +49,7 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         session = self.scope['session']
         print("*********** USER " + str(session["user_id"]) + " CONNECTED *************")
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        # print(self.scope['url_route']['kwargs']['match_id'])
+        self.room_name = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,

@@ -121,11 +121,6 @@ class User(models.Model):
         print("match deleted")
 
 
-# class Match(models.Model):
-#     user1 = models.ForeignKey(User, related_name="match1", on_delete=models.CASCADE)
-#     user2 = models.ForeignKey(User, related_name="match2", on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
 #creating model for messaging
 # class Message(models.Model):
 #     sender = models.ForeignKey(User, related_name= 'send', on_delete=models.CASCADE)
@@ -163,7 +158,6 @@ class Message(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, related_name="author_messages", on_delete=models.CASCADE)
     recipient = models.ForeignKey(User, related_name="received_messages", on_delete=models.CASCADE, null=True)
-    # match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     def __str__(self):
