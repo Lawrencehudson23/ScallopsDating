@@ -26,6 +26,7 @@
 <body>
 	{{ first_name| json_script:"first_name" }}
 	{{ last_name| json_script:"last_name" }}
+	{{ user_id| json_script:"user_id" }}
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
@@ -59,21 +60,18 @@
 			<ul id="chat-log">
 				{% if matches %}
 				{% for match in matches %}
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status online"></span>
-						<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-						<div class="meta">
-<<<<<<< HEAD
-							<p class="name">{{ match.first_name }}</p>
-							<p class="preview">Start a conversation with {{match.first_name}}</p>
-=======
-							<p class="name">{{ match.user2.first_name }}</p>
-							<p class="preview">You just got LITT up, Mike.</p>
->>>>>>> match
+				<a href="/chat/main/{{user_id}}/{{match.id}}">
+					<li class="contact">
+						<div class="wrap">
+							<span class="contact-status online"></span>
+							<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+							<div class="meta">
+								<p class="name">{{ match.user2.first_name }}</p>
+								<p class="preview">Start a conversation with {{match.user2.first_name}}</p>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
+				</a>
 				{% endfor %}
 				<li class="contact active">
 					<div class="wrap">
@@ -130,13 +128,13 @@
 <script src="{% static 'js/reconnecting-websocket.js'%}"></script>
 	{{ room_name|json_script:"room-name" }}
 	{{ user_id| json_script:"user_id" }}
-	{{ room_id | json_script:"room_id" }}
-	{{ match_id | json_script:"match_id"}}
+	{{ match_id | json_script:"match_id" }}
+	{{ matched_user_id | json_script:"matched_user_id"}}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 		const user_id = JSON.parse(document.getElementById('user_id').textContent);
-		const room_id = JSON.parse(document.getElementById('room_id').textContent);
 		const match_id = JSON.parse(document.getElementById('match_id').textContent);
+		const matched_user_id = JSON.parse(document.getElementById('matched_user_id').textContent);
 
         const chatSocket = new ReconnectingWebSocket(
             'ws://'
@@ -146,7 +144,7 @@
             + '/'
 			+ user_id
 			+ '/'
-			+ room_id
+			+ match_id
 			+ '/'
 		);
 
@@ -156,7 +154,7 @@
 					'message': null,
 					'command': 'fetch_messages',
 					'from': user_id,
-					'to':match_id,
+					'to':null,
 			}));
 		}
 
@@ -211,10 +209,11 @@
                 'message': message,
                 'command': 'new_message',
                 'from':user_id,
-				'to':match_id,
+				'to':matched_user_id,
 			}));
             messageInputDom.value = '';
         };
+
     </script>
 
 </body>

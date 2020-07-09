@@ -96,7 +96,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
-    matches = models.ManyToManyField("self", related_name="matched_with")
+    matches = models.ManyToManyField("self", through="Match")
 
     objects = UserManager()
 
@@ -119,6 +119,7 @@ class User(models.Model):
         
         self.matches.remove(unliked_user)
         print("match deleted")
+
 
 
 #creating model for messaging
@@ -165,7 +166,6 @@ class Message(models.Model):
 
     def last_10_messages(self):
         return self.object.order_by('-created_at').all()[:10]
-
    
 
 # TODO: PICTURE
@@ -175,4 +175,9 @@ class Message(models.Model):
 #     updated_at = models.DateTimeField(auto_now = True)
 #     user = models.ForeignKey(User, related_name='pictures', null=True,on_delete=models.CASCADE)
 
+class Match(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="match1")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="match2")
+    messages = models.ManyToManyField(Message, related_name="matches")
+    created_at = models.DateTimeField(auto_now_add=True)
 

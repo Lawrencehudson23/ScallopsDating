@@ -252,39 +252,64 @@ def ajax_like(request):
 def chat_index(request):
     return render(request,'chat/index.html', {})
 
-def room(request, room_name, user_id):
+def toRoom(request, room_name, user_id):
     if "user_id" not in request.session:
         return redirect("/login/")
     logged_user = User.objects.get(id=request.session['user_id'])
     if logged_user.id != user_id:
         return redirect('/login')
-    matches = logged_user.matches.all().order_by('-created_at').all()
-    print(matches[0])
-    messages = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:10]
-    print(messages)
-    if len(messages)> 0:
-        newest_msg = messages[0]
-        if newest_msg.author.id == logged_user.id:
-            match = newest_msg.recipient
-        else:
-            match = newest_msg.author
-        # match1 = User.matches.through.objects.filter(from_user_id=newest_msg.author.id).filter(to_user_id=newest_msg.recipient.id)
-        # match2 = User.matches.through.objects.filter(from_user_id=newest_msg.recipient.id).filter(to_user_id=newest_msg.author.id)
-        if newest_msg.author.id<newest_msg.recipient.id:
-            room_id = str(newest_msg.author.id)+str(newest_msg.recipient.id)
-        else:
-            room_id = str(newest_msg.recipient.id)+str(newest_msg.author.id)   
-    elif len(matches)> 0: 
-        newest_msg = []
-        print(matches)
-        match = matches[0]
-        print(match)
-        if logged_user.id <match.id:
-            room_id = str(logged_user.id)+str(match.id)
-        else:
-            room_id = str(match.id)+str(logged_user.id) 
+    newest_msg = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:1]
+    if newest_msg:
+            newest_msg = newest_msg[0]
+            if newest_msg.author.id == logged_user.id:
+                matched_user = newest_msg.recipient
+            else:
+                matched_user = newest_msg.author
     else:
+        matched_user = logged_user.matches.all().order_by('-created_at').all()[:1]
+        matched_user = matched_user[0]
+    if not matched_user:
         return render(request, 'base.html')
+
+    match = Match.objects.get(user1=logged_user.id, user2=matched_user.id)
+    # match2 = Match.objects.get(user1=matched_user[0].id, user2=logged_user.id)
+    # if match.id < match2.id:
+    #     match_id = match.id
+    # else:
+    #     match_id = match2.id
+    return redirect ('/chat/'+ room_name + '/' + str(user_id) + '/' + str(match.id))
+
+
+
+def room(request, room_name, user_id, match_id):
+    if "user_id" not in request.session:
+        return redirect("/login/")
+    logged_user = User.objects.get(id=request.session['user_id'])
+    if logged_user.id != user_id:
+        return redirect('/login')
+    user1 = Match.objects.get(id=match_id).user1
+    user2 = Match.objects.get(id=match_id).user2
+    if user1 == logged_user:
+        matched_user = user2
+    else:
+        matched_user = user1
+    match = Match.objects.get(user1=logged_user.id, user2=matched_user.id)
+    match2 = Match.objects.get(user1=matched_user.id, user2=logged_user.id)
+    if match.id < match2.id:
+        match_id = match.id
+    else:
+        match_id = match2.id
+    matches = Match.objects.filter(user1 = user_id).order_by('-created_at').all()[:10]
+    logged_user.matches.all().order_by('-created_at').all()
+    messages = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:10] 
+    if len(messages)< 0:
+        newest_msg = []
+        
+    # match1 = User.matches.through.objects.filter(from_user_id=newest_msg.author.id).filter(to_user_id=newest_msg.recipient.id)
+    # match2 = User.matches.through.objects.filter(from_user_id=newest_msg.recipient.id).filter(to_user_id=newest_msg.author.id)
+ 
+
+
     # WHAT IF USER DOENST HAVE ANY MESSAGES YET
     # AND WHAT IF THEY DONT HAVE ANY MATCHES EITHER
        
@@ -294,9 +319,9 @@ def room(request, room_name, user_id):
         'first_name':User.objects.get(id=request.session["user_id"]).first_name,
         'last_name':User.objects.get(id=request.session["user_id"]).last_name,
         "matches": matches,
-        "match_id": match.id,
+        "matched_user_id": matched_user.id,
         "messages": messages,
-        'room_id': room_id,
+        'match_id': match_id,
     }
     return render(request, 'chat/room.html', context)
 

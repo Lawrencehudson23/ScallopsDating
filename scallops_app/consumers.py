@@ -1,15 +1,18 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from .models import Message, User
+from .models import Message, User, Match
 from channels.auth import login
 
 class ChatConsumer(WebsocketConsumer):
 
     def fetch_messages(self, data):
-        author_id = data['from']
-        author = User.objects.get(id= self.scope["session"]["user_id"])
-        messages = author.author_messages.order_by('-created_at').all()[:10]
+        # author_id = data['from']
+        # author = User.objects.get(id= self.scope["session"]["user_id"])
+        # messages = author.author_messages.order_by('-created_at').all()[:10]
+
+        messages = Match.objects.get(id=self.scope['url_route']['kwargs']['match_id']).messages.order_by('-created_at').all()
+
         content = {
             'command':'messages',
             'messages' : self.messages_to_json(messages)
@@ -17,9 +20,11 @@ class ChatConsumer(WebsocketConsumer):
         self.send_message(content)
 
     def new_message(self, data):
-        author_user = User.objects.get(id= self.scope["session"]["user_id"])
+        author_user = User.objects.get(id= data["from"])
         recipient = User.objects.get(id=data['to'])
         message = Message.objects.create(content=data['message'],author=author_user, recipient = recipient)
+        m1 = Match.objects.get(user1=author_user.id, user2=recipient.id).messages.add(message)
+        m2 = Match.objects.get(user1=recipient.id, user2=author_user.id).messages.add(message)
         content = {
             'command' : 'new_message',
             'message' : self.message_to_json(message)
@@ -49,7 +54,8 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         session = self.scope['session']
         print("*********** USER " + str(session["user_id"]) + " CONNECTED *************")
-        self.room_name = self.scope['url_route']['kwargs']['room_id']
+        print(self.scope['url_route']['kwargs'])
+        self.room_name = self.scope['url_route']['kwargs']['match_id']
         self.room_group_name = 'chat_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
