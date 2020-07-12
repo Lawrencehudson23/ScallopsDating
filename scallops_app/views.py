@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import random
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 import json
@@ -128,15 +129,40 @@ def display_profile(request):
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
     }
     return render(request, 'profile.html',context)
+
 def display_1on1(request):
     if "user_id" not in request.session:
         return redirect("/login/")
 
-    context = {
-        "user" : User.objects.get(id=request.session["user_id"]),
-        "all_users" : User.objects.exclude(id=request.session["user_id"]),
-    }
-    return render(request, '1on1.html',context)
+    logged_user = User.objects.get(id=request.session["user_id"])
+
+    try:
+        all_users = User.objects.exclude(id=logged_user.id).order_by("created_at")
+        liked_already = logged_user.likes.all().order_by("created_at")
+        not_yet_liked = []
+
+        i = 0
+        j= 0 
+        while j < len(liked_already):
+            if liked_already[j] == all_users[i]:
+                j+=1
+            else:
+                not_yet_liked.append(all_users[i])
+            i+=1
+    
+        not_yet_liked.extend(all_users[i:len(all_users)])
+        print(not_yet_liked)
+        if len(not_yet_liked) < 1:
+            return render(request, '1on1error.html')
+
+        context = {
+            "user" : logged_user,
+            "potential": not_yet_liked[random.randint(0,(len(not_yet_liked)-1))],
+        }
+        print(context["potential"])
+        return render(request, '1on1.html',context)
+    except:
+        return redirect("/")
 
 def display_edit_profile(request):
     return render(request, 'edit_profile.html')
@@ -189,47 +215,21 @@ def ajax_game(request):
     }
     return render(request, 'answer_game.html',context)
 
-def display_message(request):
-    logged_user = User.objects.get(id=request.session["user_id"])
-
-    context = {
-        'all_messages' : logged_user.messages.all(),
-        "logged_user": logged_user,
-    }
-    return render(request,'message.html', context)
-
-def ajax_message(request):
-
-    logged_user = User.objects.get(id=request.session["user_id"])
-
-    message = Message.objects.create(message=request.POST["message"], user=logged_user, match=Match.objects.get(id=1))
-
-    context = {
-        'all_messages' : logged_user.messages.all(),
-        "logged_user": logged_user,
-    }
-    return render(request, 'ajax_message.html',context)
-
-
-
-
-def display_1on1(request):
-    if "user_id" not in request.session:
-        return redirect("/login/")
-
-    context = {
-        "user" : User.objects.get(id=request.session["user_id"]),
-        "all_users" : User.objects.exclude(id=request.session["user_id"]),
-    }
-    return render(request, '1on1.html',context)
-
 # TODO: LIKE DISLIKE
 def like(request):
-    currentUser= User.objects.get(id=request.session['id'])
-    chooseUser=User.objects.get(id=request.session['chooseUser'])
-    newLikes=Like.objects.get(liked_by=currentUser).likes().append(chooseUser)
-    Like.objects.get(liked_by=currentUser, likes=newLikes)
+    currentUser= User.objects.get(id=request.session['user_id'])
+    likedUser=User.objects.get(id=request.POST['liked'])
+    currentUser.likes.add(likedUser)
+    likedList = likedUser.likes.all()
+    for user in likedList:
+        if user == currentUser:
+            match = Match.objects.create(user1=currentUser, user2=likedUser)
+            print('theres a match!')
+            messages.info(request,"You matched with "+ match.user2.first_name)
+            return redirect('/1on1/')
+        
     return redirect('/1on1/')
+
 def dislike(request):
     pass
     return redirect('/1on1/')
@@ -250,8 +250,28 @@ def chat_index(request):
     return render(request,'chat/index.html', {})
 
 def room(request, room_name):
-    return render(request, 'chat/room.html', {
-        'room_name': room_name
-    })
+    if "user_id" not in request.session:
+        return redirect("/login/")
+    context = {
+        'room_name': room_name,
+        'user_id': request.session["user_id"],
+        'first_name':User.objects.get(id=request.session["user_id"]).first_name,
+        'last_name':User.objects.get(id=request.session["user_id"]).last_name,
+    }
+    return render(request, 'chat/room.html', context)
+
+
+
+# def ajax_message(request):
+
+#     logged_user = User.objects.get(id=request.session["user_id"])
+
+#     message = Message.objects.create(message=request.POST["message"], user=logged_user, match=Match.objects.get(id=1))
+
+#     context = {
+#         'all_messages' : logged_user.messages.all(),
+#         "logged_user": logged_user,
+#     }
+#     return render(request, 'ajax_message.html',context)
 
 
