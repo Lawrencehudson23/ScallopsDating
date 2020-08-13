@@ -667,3 +667,7 @@ body {
   #frame .content .message-input .wrap button:focus {
     outline: none;
   }
+  #contact-link{
+    color: white;
+    text-decoration: none;
+  }

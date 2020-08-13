@@ -3,8 +3,40 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from .models import Message, User, Match
 from channels.auth import login
+from django.db.models import Q, Count, Max
 
 class ChatConsumer(WebsocketConsumer):
+
+    def get_matches(self, data):
+        matches = Match.objects.filter(user1=data['from']).annotate(message = Max('messages')).order_by('-message').all()[:15]
+        new_messages = []
+        matches_with_no_msgs = []
+        for match in matches:
+            message = match.messages.order_by('-created_at').all()[:1]
+            if match.id > Match.objects.get(user1=match.user2.id, user2=data['from']).id:
+                matchId = Match.objects.get(user1=match.user2.id, user2=data['from']).id
+            else:
+                matchId = match.id
+            if len(message)>0:
+                new_messages.append({
+                    "match_id" : matchId,
+                    # MATCH ID NEEDS TO BE SMALLER ONE
+                    "matched_user_first_name": match.user2.first_name,
+                    "matched_user_last_name": match.user2.last_name,
+                    'content':message[0].content,
+                    'created_at':str(message[0].created_at),
+                })
+            else:
+                matches_with_no_msgs.append({
+                    "match_id" : matchId,
+                    "matched_user_first_name": match.user2.first_name,
+                    "matched_user_last_name": match.user2.last_name,
+                })
+        return {
+            "new_messages":new_messages,
+            'matches_with_no_msgs':matches_with_no_msgs,
+        }
+
 
     def fetch_messages(self, data):
         # author_id = data['from']
@@ -15,7 +47,8 @@ class ChatConsumer(WebsocketConsumer):
 
         content = {
             'command':'messages',
-            'messages' : self.messages_to_json(messages)
+            'messages' : self.messages_to_json(messages),
+            'matches' : self.get_matches(data),
         }
         self.send_message(content)
 
@@ -27,7 +60,8 @@ class ChatConsumer(WebsocketConsumer):
         m2 = Match.objects.get(user1=recipient.id, user2=author_user.id).messages.add(message)
         content = {
             'command' : 'new_message',
-            'message' : self.message_to_json(message)
+            'message' : self.message_to_json(message),
+            'matches' : self.get_matches(data),
         }
         return self.send_chat_message(content)
 

@@ -1,4 +1,8 @@
+{% extends "base.html" %}
+
+{% block title%}{% endblock %}
 {% load static %}
+{% block content %}
 <!DOCTYPE html><html class=''>
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -27,6 +31,9 @@
 	{{ first_name| json_script:"first_name" }}
 	{{ last_name| json_script:"last_name" }}
 	{{ user_id| json_script:"user_id" }}
+	{{ match_id | json_script:"match_id" }}
+	{{ matched_user_first_name | json_script:"matched_user_first_name"}}
+	<!-- {{ new_messages | json_script:"new_messages"}} -->
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
@@ -58,32 +65,56 @@
 		</div>
 		<div id="contacts">
 			<ul id="chat-log">
-				{% if matches %}
-				{% for match in matches %}
-				<a href="/chat/main/{{user_id}}/{{match.id}}">
-					<li class="contact">
-						<div class="wrap">
-							<span class="contact-status online"></span>
-							<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-							<div class="meta">
-								<p class="name">{{ match.user2.first_name }}</p>
-								<p class="preview">Start a conversation with {{match.user2.first_name}}</p>
+				<!-- {% if new_messages %}
+				{% for message in new_messages %}
+					{% if message.match_id == match_id %}
+						<li class="contact active" id={{message.match_id}}>
+					{% else %}
+						<li class="contact" id={{message.match_id}}>
+					{% endif %}
+						<a id= "contact-link" href="/chat/main/{{user_id}}/{{message.match_id}}">
+							<div class="wrap">
+								<span class="contact-status online"></span>
+								<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+								<div class="meta">
+									<p class="name">{{ message.matched_user_first_name }} {{ message.matched_user_last_name }}</p>
+									<p class="preview">{{message.content}}</p>
+								</div>
 							</div>
-						</div>
+						</a>
 					</li>
-				</a>
 				{% endfor %}
-				<li class="contact active">
-					<div class="wrap">
-						<span class="contact-status busy"></span>
-						<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-						<div class="meta">
-							<p class="name">Harvey Specter</p>
-							<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-						</div>
-					</div>
-				</li>
 				{% endif %}
+
+
+
+
+
+
+
+
+
+
+				{% if match_with_no_msgs %}
+				{% for match in match_with_no_msgs %}
+					{% if match.id == match_id %}
+						<li class="contact active" id={{message.match_id}}>
+					{% else %}
+						<li class="contact" id={{message.match_id}}>
+					{% endif %}
+						<a id= "contact-link" href="/chat/main/{{user_id}}/{{match.id}}">
+							<div class="wrap">
+								<span class="contact-status online"></span>
+								<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+								<div class="meta">
+									<p class="name">{{ match.user2.first_name }}</p>
+									<p class="preview">Start a conversation with {{match.user2.first_name}}</p>
+								</div>
+							</div>
+						</a>
+					</li>
+				{% endfor %}
+				{% endif %} -->
 			</ul>
 		</div>
 		<div id="bottom-bar">
@@ -94,7 +125,7 @@
 	<div class="content">
 		<div class="contact-profile">
 			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-			<p>{{ username }}</p>
+			<p>{{ matched_user_first_name}}</p>
 			<div class="social-media">
 				<i class="fa fa-facebook" aria-hidden="true"></i>
 				<i class="fa fa-twitter" aria-hidden="true"></i>
@@ -103,14 +134,14 @@
 		</div>
 		<div class="messages">
 			<ul>
-				<li class="sent">
+				<!-- <li class="sent">
 					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
 					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
 				</li>
 				<li class="replies">
 					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
 					<p>When you're backed against the wall, break the god damn thing down.</p>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 		<div class="message-input">
@@ -173,20 +204,118 @@
 			msgListTag.appendChild(imgTag);
 			msgListTag.appendChild(pTag);
 			document.querySelector('.messages ul').appendChild(msgListTag);
+			$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 		}
+
+		function loadMatchWithMsg(match, update = false){
+			const matchListTag = document.createElement('li');
+			if(match.match_id == match_id){
+				matchListTag.className = 'contact active';
+			} else {
+				matchListTag.className = 'contact';
+			}
+			matchListTag.id = match.match_id
+			const aTag = document.createElement('a');
+			aTag.setAttribute('href',"/chat/main/" + user_id + "/" + match.match_id);
+			aTag.id = 'contact-link';
+			const wrapDiv = document.createElement('div');
+			wrapDiv.className = 'wrap';
+			const imgTag = document.createElement('img');
+			imgTag.src = "http://emilcarlsson.se/assets/mikeross.png";
+			
+			const innerDiv = document.createElement('div');
+			innerDiv.className = "meta";
+			const name = document.createElement('p');
+			name.className = "name"
+			name.textContent = match.matched_user_first_name + " " + match.matched_user_last_name
+			const preview = document.createElement('p');
+			preview.className = "preview"
+			preview.textContent = match.content
+
+			innerDiv.appendChild(name);
+			innerDiv.appendChild(preview);
+			wrapDiv.appendChild(imgTag);
+			wrapDiv.appendChild(innerDiv);
+			aTag.appendChild(wrapDiv);
+			matchListTag.appendChild(aTag);
+			const chatLog = document.querySelector('#chat-log')
+			chatLog.appendChild(matchListTag)
+			if (update == true){
+				chatLog.insertBefore(matchListTag, chatLog.childNodes[0])
+			}
+		}
+
+		function loadMatchWithoutMsg(match){
+			const matchListTag = document.createElement('li');
+			if(match.match_id == match_id){
+				matchListTag.className = 'contact active';
+			} else {
+				matchListTag.className = 'contact';
+			}
+			matchListTag.id = match.match_id
+			const aTag = document.createElement('a');
+			aTag.setAttribute('href',"/chat/main/" + user_id + "/" + match.match_id);
+			aTag.id = 'contact-link';
+			const wrapDiv = document.createElement('div');
+			wrapDiv.className = 'wrap';
+			const imgTag = document.createElement('img');
+			imgTag.src = "http://emilcarlsson.se/assets/mikeross.png";
+			
+			const innerDiv = document.createElement('div');
+			innerDiv.className = "meta";
+			const name = document.createElement('p');
+			name.className = "name"
+			name.textContent = match.matched_user_first_name + " " + match.matched_user_last_name
+			const preview = document.createElement('p');
+			preview.className = "preview"
+			preview.textContent = "Start a conversation with " + match.matched_user_first_name
+
+			innerDiv.appendChild(name);
+			innerDiv.appendChild(preview);
+			wrapDiv.appendChild(imgTag);
+			wrapDiv.appendChild(innerDiv);
+			aTag.appendChild(wrapDiv);
+			matchListTag.appendChild(aTag);
+			const chatLog = document.querySelector('#chat-log')
+			chatLog.appendChild(matchListTag)
+
+		}
+
+
+	
+
+
+
 
         chatSocket.onmessage = function(e) {
 			
 			const data = JSON.parse(e.data);
+			let matchesWithMsgs = data.matches.new_messages;
+			let matchesWithoutMsgs = data.matches.matches_with_no_msgs
 			if (data.command == "messages" ){
 				let messages = data.messages;
 				for (let i=messages.length-1; i>=0; i--){
 					appendMessageOnChat(messages[i])
 				}
+
+				for (let j=0; j<matchesWithMsgs.length; j++){
+					loadMatchWithMsg(matchesWithMsgs[j])
+				}
+				for (let k=0; k<matchesWithoutMsgs.length; k++){
+					loadMatchWithoutMsg(matchesWithoutMsgs[k])
+				}
 			}
 			else if (data.command == "new_message"){
 				appendMessageOnChat(data.message)
+
+				const matchId = matchesWithMsgs[0].match_id
+				const match = document.getElementById(matchId)
+				match.parentNode.removeChild(match)
+				
+				loadMatchWithMsg(matchesWithMsgs[0], true)
+				
 			}
+			$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
         };
 
@@ -216,5 +345,6 @@
 
     </script>
 
+{% endblock %}
 </body>
 </html>
