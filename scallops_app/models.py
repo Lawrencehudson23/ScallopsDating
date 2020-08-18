@@ -1,6 +1,7 @@
 from django.db import models
 import re
 from datetime import datetime
+from django.db.models import Q
 
 class UserManager(models.Manager):
     def user_validator(self, post_Data):
@@ -95,6 +96,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
+    matches = models.ManyToManyField("self", through="Match")
 
     objects = UserManager()
 
@@ -115,21 +117,15 @@ class User(models.Model):
         user_id = self.id
         unliked_user = User.objects.get(id=unliked_user_id)
         self.likes.remove(unliked_user)
-        try:
-            match = Match.objects.filter(user1=self).filter(user2=unliked_user)
-            match.delete()
-            print("match deleted")
-        except:
-            match = Match.objects.filter(user1=unliked_user).filter(user2=self)
-            match.delete()
-            print("match deleted")
+        
+        self.matches.remove(unliked_user)
+        print("match deleted")
 
 
-
-class Match(models.Model):
-    user = models.ForeignKey(User, related_name="users", on_delete=models.CASCADE)
-    matched_user = models.ForeignKey(User, related_name="matches", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Match(models.Model):
+#     user = models.ForeignKey(User, related_name="users", on_delete=models.CASCADE)
+#     matched_user = models.ForeignKey(User, related_name="matches", on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
 #creating model for messaging
 # class Message(models.Model):
@@ -169,14 +165,14 @@ class Message(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, related_name="author_messages", on_delete=models.CASCADE)
     recipient = models.ForeignKey(User, related_name="received_messages", on_delete=models.CASCADE, null=True)
-    # match = models.ForeignKey(Match, related_name="messages", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     def __str__(self):
         return self.author.first_name
 
     def last_10_messages(self):
-        return Message.object.order_by('-created_at').all()[:10]
+        return self.object.order_by('-created_at').all()[:10]
+   
 
 # TODO: PICTURE
 # class Picture(models.Model):
@@ -185,4 +181,9 @@ class Message(models.Model):
 #     updated_at = models.DateTimeField(auto_now = True)
 #     user = models.ForeignKey(User, related_name='pictures', null=True,on_delete=models.CASCADE)
 
+class Match(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="match1")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="match2")
+    messages = models.ManyToManyField(Message, related_name="matches")
+    created_at = models.DateTimeField(auto_now_add=True)
 

@@ -8,6 +8,7 @@ from django.core.files.storage import FileSystemStorage
 import random
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Count, Max
 
 
 import json
@@ -15,6 +16,7 @@ import json
 def index(request):
     if "user_id" not in request.session:
         return redirect("/login/")
+    print("logged user is: "+ str(request.session["user_id"]))
 
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
@@ -95,6 +97,7 @@ def process_login(request):
         if bcrypt.checkpw(request.POST['login_password'].encode(), logged_user.password.encode()):
             request.session["user_id"] = logged_user.id
             request.session["user_first"] = logged_user.first_name
+            print("user id is: "+ str(logged_user.id))
             return redirect('/')
         else:
             messages.error(request, "Incorrect password")
@@ -223,9 +226,9 @@ def like(request):
     likedList = likedUser.likes.all()
     for user in likedList:
         if user == currentUser:
-            match = Match.objects.create(user1=currentUser, user2=likedUser)
+            currentUser.matches.add(likedUser)
             print('theres a match!')
-            messages.info(request,"You matched with "+ match.user2.first_name)
+            messages.info(request,"You matched with "+ likedUser.first_name)
             return redirect('/1on1/')
         
     return redirect('/1on1/')
@@ -249,14 +252,104 @@ def ajax_like(request):
 def chat_index(request):
     return render(request,'chat/index.html', {})
 
-def room(request, room_name):
+def toRoom(request, room_name, user_id):
     if "user_id" not in request.session:
         return redirect("/login/")
+    logged_user = User.objects.get(id=request.session['user_id'])
+    if logged_user.id != user_id:
+        return redirect('/login')
+    newest_msg = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:1]
+    try:
+        if newest_msg:
+            newest_msg = newest_msg[0]
+            if newest_msg.author.id == logged_user.id:
+                matched_user = newest_msg.recipient
+            else:
+                matched_user = newest_msg.author
+        else:
+            matched_user = logged_user.matches.all().order_by('-created_at').all()[:1]
+            matched_user = matched_user[0]
+    except:
+        return render(request, 'base.html')
+
+    # match = Match.objects.get(user1=logged_user.id, user2=matched_user.id)
+    match = Match.objects.filter( Q(user1=logged_user.id, user2=matched_user.id) | Q(user1=matched_user.id, user2=logged_user.id)).order_by('id').all()[:1]
+    # match_id = match.id
+    # match2 = Match.objects.get(user1=matched_user[0].id, user2=logged_user.id)
+    # if match.id < match2.id:
+    #     match_id = match.id
+    # else:
+    #     match_id = match2.id
+    return redirect ('/chat/'+ room_name + '/' + str(user_id) + '/' + str(match[0].id))
+
+
+
+def room(request, room_name, user_id, match_id):
+    if "user_id" not in request.session:
+        return redirect("/login/")
+    logged_user = User.objects.get(id=request.session['user_id'])
+    if logged_user.id != user_id:
+        return redirect('/login')
+    user1 = Match.objects.get(id=match_id).user1
+    user2 = Match.objects.get(id=match_id).user2
+    if user1 == logged_user:
+        matched_user = user2
+    else:
+        matched_user = user1
+    # match = Match.objects.get(user1=logged_user.id, user2=matched_user.id)
+    # match2 = Match.objects.get(user1=matched_user.id, user2=logged_user.id)
+    # if match.id < match2.id:
+    #     match_id = match.id
+    # else:
+    #     match_id = match2.id
+    # matches = Match.objects.filter(user1 = user_id).order_by('-created_at').all()[:10]
+    # logged_user.matches.all().order_by('-created_at').all()
+    # messages = Message.objects.filter( Q(author__id = user_id) | Q(recipient__id = user_id)).order_by('-created_at').all()[:10] 
+
+    # matches = Match.objects.filter(user1 = user_id).annotate(mcount = Count('messages')).order_by('-created_at').all()[:15]  
+    matches = Match.objects.filter(user1 = user_id).order_by('messages').all()[:15]
+    matches = Match.objects.filter(user1=user_id).annotate(message = Max('messages')).order_by('-message').all()[:15]
+
+    print(matches)
+    new_messages = []
+    match_with_no_msgs = []
+    for match in matches:
+        message = match.messages.order_by('-created_at').all()[:1]
+        if match.id > Match.objects.get(user1=match.user2.id, user2=user_id).id:
+            matchId = Match.objects.get(user1=match.user2.id, user2=user_id).id
+        else:
+            matchId = match.id
+        if len(message)>0:
+            new_messages.append({
+                "match_id" : matchId,
+                # MATCH ID NEEDS TO BE SMALLER ONE
+                "matched_user_first_name": match.user2.first_name,
+                "matched_user_last_name": match.user2.last_name,
+                'content':message[0].content,
+                'created_at':message[0].created_at,
+            })
+        else:
+            match_with_no_msgs.append(match)
+
+    # match1 = User.matches.through.objects.filter(from_user_id=newest_msg.author.id).filter(to_user_id=newest_msg.recipient.id)
+    # match2 = User.matches.through.objects.filter(from_user_id=newest_msg.recipient.id).filter(to_user_id=newest_msg.author.id)
+ 
+
+
+    # WHAT IF USER DOENST HAVE ANY MESSAGES YET
+    # AND WHAT IF THEY DONT HAVE ANY MATCHES EITHER
+    
     context = {
         'room_name': room_name,
         'user_id': request.session["user_id"],
         'first_name':User.objects.get(id=request.session["user_id"]).first_name,
         'last_name':User.objects.get(id=request.session["user_id"]).last_name,
+        "matches": matches,
+        "matched_user_id": matched_user.id,
+        "matched_user_first_name":matched_user.first_name,
+        'match_id': match_id,
+        # "new_messages":new_messages,
+        # 'match_with_no_msgs':match_with_no_msgs,
     }
     return render(request, 'chat/room.html', context)
 
@@ -275,3 +368,13 @@ def room(request, room_name):
 #     return render(request, 'ajax_message.html',context)
 
 
+
+
+# >>> matches = Match.objects.filter(user1 = 1).annotate(mcount = Count('messages')).order_by('-created_at')                   
+# >>> matches
+# <QuerySet [<Match: Match object (7)>, <Match: Match object (6)>, <Match: Match object (3)>, <Match: Match object (2)>]>
+# >>> matches[0].mcount
+# 10
+# >>> messages = matches[0].messages.order_by('-created_at') 
+# >>> messages[0]
+# <Message: Dora>
