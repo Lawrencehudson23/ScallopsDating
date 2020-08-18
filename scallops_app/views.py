@@ -21,6 +21,7 @@ def index(request):
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
+        "user_id" : request.session["user_id"],
     }
     return render(request,'base.html', context)
 
@@ -161,6 +162,7 @@ def display_1on1(request):
         context = {
             "user" : logged_user,
             "potential": not_yet_liked[random.randint(0,(len(not_yet_liked)-1))],
+            "user_id" : logged_user.id,
         }
         print(context["potential"])
         return render(request, '1on1.html',context)
