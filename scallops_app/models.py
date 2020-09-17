@@ -96,6 +96,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
+    skips = models.ManyToManyField("self", related_name="skipped_by")
     matches = models.ManyToManyField("self", through="Match")
 
     objects = UserManager()
@@ -120,6 +121,9 @@ class User(models.Model):
         
         self.matches.remove(unliked_user)
         print("match deleted")
+    
+    def group_name(self):
+        return "user_%s" % self.id
 
 
 # class Match(models.Model):

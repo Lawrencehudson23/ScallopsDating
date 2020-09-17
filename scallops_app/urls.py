@@ -26,4 +26,5 @@ urlpatterns = [
     path('chat/<str:room_name>/<int:user_id>/', views.toRoom),
     path('chat/<str:room_name>/<int:user_id>/<int:match_id>', views.room),
     path('single/', views.display_single),
+    path('skip/', views.skip),
 ]

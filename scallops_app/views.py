@@ -155,7 +155,21 @@ def display_1on1(request):
             i+=1
     
         not_yet_liked.extend(all_users[i:len(all_users)])
+        print("THIS IS NOT YET LIKED LIST") 
         print(not_yet_liked)
+
+        skipped_already = logged_user.skips.all().order_by("created_at")
+        print("THIS IS SKIPPED LIST")
+        print(skipped_already)
+        i = 0
+        j= 0 
+        while j < len(skipped_already) and i < len(not_yet_liked):
+            if skipped_already[j] == not_yet_liked[i]:
+                del not_yet_liked[i]
+                j+=1
+            else:
+                j+=1
+
         if len(not_yet_liked) < 1:
             return render(request, '1on1error.html')
 
@@ -235,6 +249,12 @@ def like(request):
         
     return redirect('/1on1/')
 
+def skip(request):
+    currentUser = User.objects.get(id=request.session['user_id'])
+    skippedUser = User.objects.get(id=request.POST['skipped'])
+    currentUser.skips.add(skippedUser)
+    return redirect('/1on1/')
+
 def dislike(request):
     pass
     return redirect('/1on1/')
@@ -272,7 +292,7 @@ def toRoom(request, room_name, user_id):
             matched_user = logged_user.matches.all().order_by('-created_at').all()[:1]
             matched_user = matched_user[0]
     except:
-        return render(request, 'base.html')
+        return render(request, 'chatError.html')
 
     # match = Match.objects.get(user1=logged_user.id, user2=matched_user.id)
     match = Match.objects.filter( Q(user1=logged_user.id, user2=matched_user.id) | Q(user1=matched_user.id, user2=logged_user.id)).order_by('id').all()[:1]
