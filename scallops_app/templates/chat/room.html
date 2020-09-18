@@ -37,9 +37,9 @@
 
 <div id="wrapper">
 
-		<div id="frame">
-			<div id="sidepanel">
-				<div id="profile">
+	<div id="frame">
+		<div id="sidepanel">
+			<div id="profile">
 					<div class="wrap">
 					<img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
 					<p>{{ first_name }} {{ last_name }}</p>
@@ -68,56 +68,6 @@
 			</div>
 			<div id="contacts">
 				<ul id="chat-log">
-					<!-- {% if new_messages %}
-					{% for message in new_messages %}
-					{% if message.match_id == match_id %}
-							<li class="contact active" id={{message.match_id}}>
-						{% else %}
-							<li class="contact" id={{message.match_id}}>
-						{% endif %}
-						<a id= "contact-link" href="/chat/main/{{user_id}}/{{message.match_id}}">
-								<div class="wrap">
-									<span class="contact-status online"></span>
-									<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-									<div class="meta">
-										<p class="name">{{ message.matched_user_first_name }} {{ message.matched_user_last_name }}</p>
-										<p class="preview">{{message.content}}</p>
-									</div>
-								</div>
-							</a>
-						</li>
-					{% endfor %}
-					{% endif %}
-
-					
-					
-
-					
-
-
-
-					
-
-					{% if match_with_no_msgs %}
-					{% for match in match_with_no_msgs %}
-					{% if match.id == match_id %}
-							<li class="contact active" id={{message.match_id}}>
-						{% else %}
-							<li class="contact" id={{message.match_id}}>
-						{% endif %}
-						<a id= "contact-link" href="/chat/main/{{user_id}}/{{match.id}}">
-								<div class="wrap">
-									<span class="contact-status online"></span>
-									<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-									<div class="meta">
-										<p class="name">{{ match.user2.first_name }}</p>
-										<p class="preview">Start a conversation with {{match.user2.first_name}}</p>
-									</div>
-								</div>
-							</a>
-						</li>
-					{% endfor %}
-					{% endif %} -->
 				</ul>
 			</div>
 			<div id="bottom-bar">
@@ -137,14 +87,7 @@
 			</div>
 			<div class="messages">
 				<ul>
-					<!-- <li class="sent">
-						<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-						<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-					</li>
-					<li class="replies">
-						<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-						<p>When you're backed against the wall, break the god damn thing down.</p>
-					</li> -->
+			
 				</ul>
 			</div>
 			<div class="message-input">

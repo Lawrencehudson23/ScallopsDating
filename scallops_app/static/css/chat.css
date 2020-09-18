@@ -3,7 +3,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #5CA0B5;
+    /* background-color: hsla(194, 38%, 54%, 0.226); */
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     font-size: 1em;
     letter-spacing: 0.1px;
@@ -17,8 +17,8 @@ body {
   #wrapper{
     display:flex;
     justify-content: center;
+    margin-bottom: 40px;
   }
-  
 
   #frame {
     width: 95%;
