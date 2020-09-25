@@ -5,20 +5,20 @@
 {% block content %}
 {% load static %} 
     <h1>Hello {{ user.first_name }}</h1>
-    <img src="{{ user.profile.image.url }}" alt="profile pic" height="200px" width="200px">
+    <img src="{{ uploaded_file_url }}" alt="">
         <h2>{{ uploaded_file_url }}</h2>
         <p>Gender: {{ user.gender }} </p>
         <p>City: {{ user.city }}</p>
         <p>DOB: {{ user.birthday }}</p>
-        <p>Summary: {{ user.profile.summary}}</p>
+        <p>Summary: {{ profile_info.summary}}</p>
         <div>
 
         </div>
-        <p>Interests: {{ user.profile.interest}}</p>
+        <p>Interests: {{ profile_info.interests}}</p>
         <div>
 
         </div>
-        <p>Goals:{{ user.profile.goals }}</p>
+        <p>Goals:{{ profile_info.goals }}</p>
         <div>
 
         </div>
