@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title%}{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="../static/css/match_list.css">
+    <link rel="stylesheet" href=" {% static 'css/animate.css' %}">
+</head>
+
+<body>
+    
+
+    <div class="wrapper">
+        {% for match in match_list%}
+            <div class="match-box animate-box">
+                <div class="match-box-left">
+
+                    <p class="name">{{match.first_name}}</p>
+                    {% if match.image %}
+                        <img class="pic" src="{{ match.image.url }}" alt="profile picture">
+                    {% else %}
+                        <img src="../static/images/avator.jpg" alt="avatar">
+                    {% endif %}
+                    <h2>{{ math.image }}</h2>
+                    <p class="city">{{ match.city }}</p>
+                </div>
+                <div class="match-box-right">
+                    <p class="birthday">
+                        <span class="label">Birthday:</span>
+                        <span class="info">{{ match.birthday }}</span>
+                    </p>
+                    <p>
+                        <span class="label">Summary:</span>
+                        <span class="info">{{ match.summary}}</span> 
+                    </p>
+                    <p>
+                        <span class="label">Interests:</span>
+                        <span class="info">{{ match.interest}}</span>
+                    </p>
+                    <p>
+                        <span class="label">Goals:</span>
+                        <span class="info">{{ match.goals }}</span>
+                    </p>
+                    <a href="/chat/main/{{request.session.user_id}}/{{match.id}}">
+                        <button class="btn btn-primary btn-outline message">Message</button>
+                    </a> 
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+    
+
+    
+{% endblock %}
