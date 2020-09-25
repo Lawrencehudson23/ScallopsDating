@@ -98,13 +98,8 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-<<<<<<< HEAD
     likes = models.ManyToManyField(
         "self", related_name="liked_by", symmetrical=False)
-=======
-    likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
-    skips = models.ManyToManyField("self", related_name="skipped_by")
->>>>>>> 869a55bd50c05fd7aec90201feeb45063729bd7e
     matches = models.ManyToManyField("self", through="Match")
 
     objects = UserManager()
@@ -128,12 +123,8 @@ class User(models.Model):
 
         self.matches.remove(unliked_user)
         print("match deleted")
-    
-    def group_name(self):
-        return "user_%s" % self.id
 
 
-<<<<<<< HEAD
 # class Match(models.Model):
 #     user = models.ForeignKey(User, related_name="users", on_delete=models.CASCADE)
 #     matched_user = models.ForeignKey(User, related_name="matches", on_delete=models.CASCADE)
@@ -158,34 +149,22 @@ class Profile(models.Model):
     goals = models.TextField(default='Nothing to display')
     updated_at = models.DateTimeField(auto_now_add=True)
 
-
-# class Profile(models.Model):
-#     # image = models.ImageField(width_field=200px, height_field=400px)
-#     summary = models.TextField()
-#     interest = models.TextField()
-#     goals = models.TextField()
-=======
-
-class Profile(models.Model):
-    image = models.ImageField(default = '/images/avator.jpg', upload_to='images')
-    summary = models.TextField(default = 'Nothing to display')
-    interest = models.TextField(default = 'Nothing to display')
-    goals = models.TextField(default = 'Nothing to display')
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-
 # class Profile(models.Model):
 #     image = models.ImageField(width_field=200px, height_field=400px)
 #     summary = models.TextField()
 #     interest = models.TextField()
 #     goals = models.TextField()
-
->>>>>>> 869a55bd50c05fd7aec90201feeb45063729bd7e
+# class Profile(models.Model):
+#     # image = models.ImageField(width_field=200px, height_field=400px)
+#     summary = models.TextField()
+#     interest = models.TextField()
+#     goals = models.TextField()
 
 # class Game(models.Model):
 #     option1 = models.CharField(max_length=1000)
 #     option2 = models.CharField(max_length=1000)
 #     created_at = models.DateTimeField(auto_now_add=True)
+
 
 class Message(models.Model):
     content = models.TextField()
