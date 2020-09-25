@@ -4,18 +4,54 @@
 
 {% block content %}
 {% load static %}
-    <form action="/edit/profile/" method ='POST'  enctype="multipart/form-data">
+
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if error %}
+        {{ error }}
+    {% endif %}
+
+    <!-- {% if image %}
+        <img src="image.url" alt="profile picture">
+    {% endif %} -->
+        
+    <!-- <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for=""> Choose your profile picture</label>
-        <input type="file" name="imgfile">
+        {{ form.as_p }}
+        <input type="submit" value="Edit Post"/>
+    </form> -->
 
-
-        <label for="">Summary:</label>
-        <textarea name="summary" id="" cols="40" rows="20"></textarea>
-        <label for="">Interests: </label>
-        <textarea name="interest" id="" cols="40" rows="20"></textarea>
-        <label for="">Goals</label>
-        <textarea name="goals" id="" cols="40" rows="20"></textarea>
-        <button>Submit</button>
+    {{ form.non_field_errors }}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="fieldWrapper">
+            {{ form.image.errors }}
+            {{ form.image.label_tag }}
+            {{ form.image }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.summary.errors }}
+            {{ form.summary.label_tag }}
+            {{ form.summary }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.interest.errors }}
+            {{ form.interest.label_tag }}
+            {{ form.interest }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.goals.errors }}
+            {{ form.goals.label_tag }}
+            {{ form.goals }}
+        </div>
+        <input type="submit" value="Edit Post"/>
     </form>
+
 {% endblock %}
+

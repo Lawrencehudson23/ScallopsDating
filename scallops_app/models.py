@@ -128,11 +128,11 @@ class User(models.Model):
 
 
 class Profile(models.Model):
-    # image = models.ImageField(default = 'static/images/default.png')
-    user = models.OneToOneField(User, related_name='my_profile', on_delete=models.CASCADE)
+    image = models.ImageField(default = '/images/avator.jpg', upload_to='images')
     summary = models.TextField(default = 'Nothing to display')
     interest = models.TextField(default = 'Nothing to display')
     goals = models.TextField(default = 'Nothing to display')
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
 # class Profile(models.Model):
@@ -140,11 +140,7 @@ class Profile(models.Model):
 #     summary = models.TextField()
 #     interest = models.TextField()
 #     goals = models.TextField()
-# class Profile(models.Model):
-#     # image = models.ImageField(width_field=200px, height_field=400px)
-#     summary = models.TextField()
-#     interest = models.TextField()
-#     goals = models.TextField()
+
 
 # class Game(models.Model):
 #     option1 = models.CharField(max_length=1000)

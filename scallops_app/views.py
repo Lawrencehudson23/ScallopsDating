@@ -9,6 +9,7 @@ import random
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Max
+from .forms import ProfileForm
 
 
 import json
@@ -72,7 +73,7 @@ def process_registration(request):
         password = request.POST["password"]
         pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode() 
         user = User.objects.create(first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=pw_hash, birthday = request.POST["birthday"], gender=request.POST["gender"], city = request.POST["city"])
-
+        Profile.objects.create(user=user)
         request.session['user_id'] = user.id
         request.session['user_first'] = user.first_name
         return redirect('/')
@@ -186,22 +187,62 @@ def display_1on1(request):
         return redirect("/")
 
 def display_edit_profile(request):
+    if "user_id" not in request.session:
+        return redirect("/login/")
+    logged_user = User.objects.get(id=request.session["user_id"])
+
+    profile = Profile.objects.get(user=logged_user)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST or None, request.FILES, instance=profile )
+        if form.is_valid():
+            profile = form.save(commit= False)
+            profile.save()
+            messages.success(request, "You successfully updated the post")
+            print("**********        "+ str(profile.user.id) + "         ********")
+            context= {
+                'form': form,
+                'image':profile.image,
+            }
+            return render(request, 'edit_profile.html',context)
+        else:
+            context= {
+            'form': form,
+            'error': 'The form was not updated successfully.'}
+            return render(request,'edit_profile.html' , context)
+            
+    else:
+        form = ProfileForm(None, instance= profile)
+        context= {'form': form}
+        return render(request, 'edit_profile.html', context)
+
+
+
     return render(request, 'edit_profile.html')
 
 def process_profile(request):
-    if request.method == 'POST' and request.FILES['imgfile']:
-        myfile = request.FILES['imgfile']
+    print("*****IN PROCESS PROFILE*************")
+
+    if request.method == 'POST' and request.FILES['image']:
+        myfile = request.FILES['image']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
+
     
+    user = User.objects.get(id=request.session["user_id"])
+    profile = Profile.objects.get(user=user)
     quick = request.POST
-    profile = Profile.objects.create(user = User.objects.get(id = request.session["user_id"]), summary = quick['summary'], interests = quick['interests'], goals = quick['goals'])
+    if profile:
+        profile.update(image=uploaded_file_url,summary = quick['summary'], interest = quick['interest'], goals = quick['goals'])
+    else:
+        profile = Profile.objects.create(user = user, image=uploaded_file_url, summary = quick['summary'], interest = quick['interest'], goals = quick['goals'])
+        print(profile)
     request.session['prof_id'] = profile.id
     context ={
          'uploaded_file_url' : uploaded_file_url,
          'user' : User.objects.get(id = request.session["user_id"]),
-         'profile_info' : Profile.objects.get(id =  request.session['prof_id']),
+         'profile_info' : Profile.objects.get(id = request.session['prof_id']),
     }    
     return  render (request, 'profile.html', context)
 def display_game(request):
@@ -256,20 +297,6 @@ def skip(request):
     skippedUser = User.objects.get(id=request.POST['skipped'])
     currentUser.skips.add(skippedUser)
     return redirect('/1on1/')
-
-def dislike(request):
-    pass
-    return redirect('/1on1/')
-    return render(request, 'profile.html')
-
-def ajax_like(request):
-    
-    logged_user = User.objects.get(id=request.session["user_id"])
-    context = {
-        'all_messages' : logged_user.messages.all(),
-        "logged_user": logged_user,
-    }
-    return render(request, 'ajax_message.html',context)
 
 def chat_index(request):
     return render(request,'chat/index.html', {})
@@ -360,15 +387,30 @@ def match_list(request):
             matchId = Match.objects.get(user1=match.user2.id, user2=request.session["user_id"]).id
         else:
             matchId = match.id
-        match_list.append({
-            "id":matchId,
-            "user2_id":match.user2.id,
-            "first_name": match.user2.first_name,
-            "last_name":match.user2.last_name,
-            "birthday":match.user2.birthday,
-            "gender":match.user2.gender,
-            "city":match.user2.city,
-        })
+        try:
+            match_list.append({
+                "id":matchId,
+                "user2_id":match.user2.id,
+                "first_name": match.user2.first_name,
+                "last_name":match.user2.last_name,
+                "birthday":match.user2.birthday,
+                "gender":match.user2.gender,
+                "city":match.user2.city,
+                "summary":match.user2.profile.summary,
+                "interest":match.user2.profile.interest,
+                'image':match.user2.profile.image,
+                'goals':match.user2.profile.goals,
+            })
+        except:
+            match_list.append({
+                "id":matchId,
+                "user2_id":match.user2.id,
+                "first_name": match.user2.first_name,
+                "last_name":match.user2.last_name,
+                "birthday":match.user2.birthday,
+                "gender":match.user2.gender,
+                "city":match.user2.city,
+            })
 
     context = {
         'match_list' : match_list,

@@ -25,7 +25,11 @@
 
       <div class='info animate-box'>
         <p>{{ potential.first_name }}</p>
-        <img src="../static/images/avator.jpg">
+        {% if potential.profile.image %}
+          <img src= "{{ potential.profile.image.url }}" alt="profile picture">
+        {% else %}
+          <img src="../static/images/avator.jpg" alt="avatar">
+        {% endif %}
         <p>{{potential.city}}</p>
         <p>Age: 25</p>
         <!-- <p>Profession: Software Engineer</p>
@@ -48,7 +52,7 @@
       <form class="pass" action="/skip/" method="post">
         {% csrf_token %}
         <input type="hidden" name="skipped" value="{{potential.id}}"/>
-        <button id="pass-btn" class="btn btn-success btn-outline btn-lg">
+        <button id="pass-btn" class="btn btn-dark btn-outline btn-lg">
           <i class="fa fa-close"></i></button>
         <!-- <input class="pass-btn" type="submit" value="PASS"/> -->
       </form>

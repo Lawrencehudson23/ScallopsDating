@@ -19,9 +19,12 @@
                 <div class="match-box-left">
 
                     <p class="name">{{match.first_name}}</p>
-                    <img class="pic" src="{{ uploaded_file_url }}" alt="">
-                    <img src="../static/images/avator.jpg" alt="">
-                    <h2>{{ uploaded_file_url }}</h2>
+                    {% if match.image %}
+                        <img class="pic" src="{{ match.image.url }}" alt="profile picture">
+                    {% else %}
+                        <img src="../static/images/avator.jpg" alt="avatar">
+                    {% endif %}
+                    <h2>{{ math.image }}</h2>
                     <p class="city">{{ match.city }}</p>
                 </div>
                 <div class="match-box-right">
@@ -31,15 +34,15 @@
                     </p>
                     <p>
                         <span class="label">Summary:</span>
-                        <span class="info">{{ profile_info.summary}}</span> 
+                        <span class="info">{{ match.summary}}</span> 
                     </p>
                     <p>
                         <span class="label">Interests:</span>
-                        <span class="info">{{ profile_info.interests}}</span>
+                        <span class="info">{{ match.interest}}</span>
                     </p>
                     <p>
                         <span class="label">Goals:</span>
-                        <span class="info">{{ profile_info.goals }}</span>
+                        <span class="info">{{ match.goals }}</span>
                     </p>
                     <a href="/chat/main/{{request.session.user_id}}/{{match.id}}">
                         <button class="btn btn-primary btn-outline message">Message</button>
