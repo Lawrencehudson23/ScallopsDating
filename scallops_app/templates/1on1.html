@@ -5,61 +5,62 @@
 
 {% block content %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+<head>
+  <link rel='stylesheet css' href="{% static 'css/1on1.css' %}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<div class="wrapper">
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
 
 
-<div class="one">
-    <form action="/next/" method="post">
-        <fieldset>
-    {% csrf_token %}
-    <button>pass</button>
-    </form>
-    <img src='{%static "images/pic_2.gif"%}' alt=""><br>
-    <label for="/like/">{{ potential.first_name }} AGE {{ potential.city }}</label>
+  <div class="one">
 
-    <form class="like" action="/like/" method="post">
-    {% csrf_token %}
-      <input type="hidden" name="liked" value="{{potential.id}}"/>
-      <input type="submit" value="LIKE"/>
-    </form>
-</fieldset>
+      <div class='info animate-box'>
+        <p>{{ potential.first_name }}</p>
+        {% if potential.profile.image %}
+          <img src= "{{ potential.profile.image.url }}" alt="profile picture">
+        {% else %}
+          <img src="../static/images/avator.jpg" alt="avatar">
+        {% endif %}
+        <p>{{potential.city}}</p>
+        <p>Age: 25</p>
+        <!-- <p>Profession: Software Engineer</p>
+        <p>Hobbies: Running, cooking, sleeping, coding all day long</p>
+        <p>Favorite Quote: Never give up.</p> -->
+      </div>
+        
+
+    
+    <div class="buttons">
+      <form class="like" action="/like/" method="post">
+        
+        {% csrf_token %}
+        <input type="hidden" name="liked" value="{{potential.id}}"/>
+        <button id="like-btn" class="btn btn-danger btn-outline btn-lg">
+          <i class="fa fa-heart"></i>
+        </button>
+        <!-- <input class="like-btn" type="submit" value="LIKE"/> -->
+      </form>
+      <form class="pass" action="/skip/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="skipped" value="{{potential.id}}"/>
+        <button id="pass-btn" class="btn btn-dark btn-outline btn-lg">
+          <i class="fa fa-close"></i></button>
+        <!-- <input class="pass-btn" type="submit" value="PASS"/> -->
+      </form>
+    </div>
+
+  </fieldset>
+  </div>
+
 </div>
 
-
-    <!-- <div class="form-group">
-    <div class="input-group mb-3">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile02">
-        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-      </div>
-      <div class="input-group-append">
-        <span class="input-group-text" id="">Upload</span>
-      </div>
-    </div>
-  </div>
-</div> -->
 {% endblock %}
-
-<!-- 
-<script>
-    $('.like').submit(function(e){
-    e.preventDefault()
-    console.log($(this).serialize())
-    $.ajax({
-        url: '/like/',
-        method: 'POST',
-        data: $(this).serialize(),
-        success: function(serverResponse){
-        $('.one').html(serverResponse)
-        console.log("Received this from server: ", serverResponse)
-    }
-  })
-})
-
-  </script> -->
