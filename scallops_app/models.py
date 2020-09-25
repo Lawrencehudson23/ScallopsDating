@@ -96,7 +96,6 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     likes = models.ManyToManyField("self", related_name="liked_by", symmetrical = False)
-    skips = models.ManyToManyField("self", related_name="skipped_by")
     matches = models.ManyToManyField("self", through="Match")
 
     objects = UserManager()
@@ -121,18 +120,29 @@ class User(models.Model):
         
         self.matches.remove(unliked_user)
         print("match deleted")
-    
-    def group_name(self):
-        return "user_%s" % self.id
 
+
+# class Match(models.Model):
+#     user = models.ForeignKey(User, related_name="users", on_delete=models.CASCADE)
+#     matched_user = models.ForeignKey(User, related_name="matches", on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#creating model for messaging
+# class Message(models.Model):
+#     sender = models.ForeignKey(User, related_name= 'send', on_delete=models.CASCADE)
+#     receiver = models.ForeignKey(User, related_name= 'receive', on_delete=models.CASCADE)
+#     r_msg = models.TextField()
+#     sender_msg = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
 
 class Profile(models.Model):
-    image = models.ImageField(default = '/images/avator.jpg', upload_to='images')
+    # image = models.ImageField(default = 'static/images/default.png')
+    user = models.OneToOneField(User, related_name='my_profile', on_delete=models.CASCADE)
     summary = models.TextField(default = 'Nothing to display')
     interest = models.TextField(default = 'Nothing to display')
     goals = models.TextField(default = 'Nothing to display')
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
 # class Profile(models.Model):
@@ -140,7 +150,11 @@ class Profile(models.Model):
 #     summary = models.TextField()
 #     interest = models.TextField()
 #     goals = models.TextField()
-
+# class Profile(models.Model):
+#     # image = models.ImageField(width_field=200px, height_field=400px)
+#     summary = models.TextField()
+#     interest = models.TextField()
+#     goals = models.TextField()
 
 # class Game(models.Model):
 #     option1 = models.CharField(max_length=1000)

@@ -4,29 +4,20 @@
 {% load static %}
 
 {% block content %}
-<head>
-    <link rel='stylesheet css' href="{% static 'css/1on1error.css' %}"/>
-    <link rel="stylesheet" href=" {% static 'css/animate.css' %}">
-  </head>
- 
-<div class="wrapper">
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
 
 
-<div class="one animate-box">
+    <div class="one">
         <h1>
-            You have viewed all scallops. 
+            You have liked all scallops.
         </h1>
-      
-        <img src="../static/images/scallop.gif" alt="">
-        <h3>Come back another time for more scallops.</h3>
+
     </div>
-</div>
 {% endblock %}
