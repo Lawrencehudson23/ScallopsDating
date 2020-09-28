@@ -207,21 +207,22 @@ def display_edit_profile(request):
                 'form': form,
                 'image':profile.image,
             }
-            return render(request, 'edit_profile.html',context)
+            return render(request, 'account-settings.html',context)
         else:
             context= {
             'form': form,
             'error': 'The form was not updated successfully.'}
-            return render(request,'edit_profile.html' , context)
+            return render(request,'account-settings.html' , context)
             
     else:
         form = ProfileForm(None, instance= profile)
         context= {'form': form}
-        return render(request, 'edit_profile.html', context)
+        return render(request, 'account-settings.html', context)
 
 
+# FIXME:
 
-    return render(request, 'edit_profile.html')
+    return render(request, 'account-settings.html')
 
 def process_profile(request):
     print("*****IN PROCESS PROFILE*************")
