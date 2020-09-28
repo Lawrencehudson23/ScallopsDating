@@ -32,6 +32,7 @@ def display_about_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
 
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
@@ -47,7 +48,7 @@ def display_single(request):
 def display_contact_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
-
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
@@ -130,6 +131,7 @@ def display_message(request):
 def display_profile(request):
     if "user_id" not in request.session:
         return redirect("/login/")
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
 
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
@@ -142,6 +144,7 @@ def display_1on1(request):
         return redirect("/login/")
 
     logged_user = User.objects.get(id=request.session["user_id"])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
 
     try:
         all_users = User.objects.exclude(id=logged_user.id).order_by("created_at")
@@ -190,7 +193,7 @@ def display_edit_profile(request):
     if "user_id" not in request.session:
         return redirect("/login/")
     logged_user = User.objects.get(id=request.session["user_id"])
-
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     profile = Profile.objects.get(user=logged_user)
 
     if request.method == "POST":
@@ -331,6 +334,7 @@ def room(request, room_name, user_id, match_id):
     if "user_id" not in request.session:
         return redirect("/login/")
     logged_user = User.objects.get(id=request.session['user_id'])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     if logged_user.id != user_id:
         return redirect('/login')
     user1 = Match.objects.get(id=match_id).user1
@@ -378,7 +382,10 @@ def room(request, room_name, user_id, match_id):
 
 
 def match_list(request):
+    if "user_id" not in request.session:
+        return redirect("/login/")
     matches = Match.objects.filter(user1=request.session["user_id"])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     if not matches:
         return render(request, 'chatError.html')
     match_list = []
