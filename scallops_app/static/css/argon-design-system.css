@@ -19035,6 +19035,19 @@ hr {
 .fileinput-new .fileinput-exists {
   display: none; }
 
+.fileinput-exists #change-btn, input[type=submit] {
+  background:none;
+  border-style: none;
+  color: white;
+  font-size: 1rem;
+}
+
+.fileinput-new #imageField, input[tyep=file] {
+  max-width: 13rem;
+  color: white;
+  font-size: 1rem;
+}
+
 .fileinput-inline .fileinput-controls {
   display: inline; }
 

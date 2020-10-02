@@ -1,7 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from .models import Message, User, Match
+from .models import Message, User, Match, Profile
 from channels.auth import login
 from django.db.models import Q, Count, Max
 
@@ -13,6 +13,9 @@ class ChatConsumer(WebsocketConsumer):
         matches_with_no_msgs = []
         for match in matches:
             message = match.messages.order_by('-created_at').all()[:1]
+            print(match.user1.profile)
+            print("*******************************************")
+            print(match.user2.profile)
             if match.id > Match.objects.get(user1=match.user2.id, user2=data['from']).id:
                 matchId = Match.objects.get(user1=match.user2.id, user2=data['from']).id
             else:
@@ -23,6 +26,7 @@ class ChatConsumer(WebsocketConsumer):
                     # MATCH ID NEEDS TO BE SMALLER ONE
                     "matched_user_first_name": match.user2.first_name,
                     "matched_user_last_name": match.user2.last_name,
+                    'match_image':match.user2.profile.image.url,
                     'content':message[0].content,
                     'created_at':str(message[0].created_at),
                 })
@@ -31,6 +35,7 @@ class ChatConsumer(WebsocketConsumer):
                     "match_id" : matchId,
                     "matched_user_first_name": match.user2.first_name,
                     "matched_user_last_name": match.user2.last_name,
+                    "match_image":match.user2.profile.image.url,
                 })
         return {
             "new_messages":new_messages,

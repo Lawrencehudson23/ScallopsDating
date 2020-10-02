@@ -41,7 +41,7 @@
 		<div id="sidepanel">
 			<div id="profile">
 					<div class="wrap">
-					<img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+					<img id="profile-img" src="{{image}}" class="online" alt="" />
 					<p>{{ first_name }} {{ last_name }}</p>
 					<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
 					<div id="status-options">
@@ -71,13 +71,15 @@
 				</ul>
 			</div>
 			<div id="bottom-bar">
-				<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+				<a href="/matches/">
+					<button id="addcontact"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span>Matches</span></button>
+				</a>
 				<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
 			</div>
 		</div>
 		<div class="content">
 			<div class="contact-profile">
-				<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+				<img src="{{match_image}}" alt="" />
 				<p>{{ matched_user_first_name}}</p>
 				<div class="social-media">
 					<i class="fa fa-facebook" aria-hidden="true"></i>
@@ -108,11 +110,15 @@
 	{{ user_id| json_script:"user_id" }}
 	{{ match_id | json_script:"match_id" }}
 	{{ matched_user_id | json_script:"matched_user_id"}}
+	{{ match_image | json_script:"match_image" }}
+	{{ image | json_script:"image"}}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 		const user_id = JSON.parse(document.getElementById('user_id').textContent);
 		const match_id = JSON.parse(document.getElementById('match_id').textContent);
 		const matched_user_id = JSON.parse(document.getElementById('matched_user_id').textContent);
+		const match_image = JSON.parse(document.getElementById('match_image').textContent);
+		const image = JSON.parse(document.getElementById('image').textContent);
 
         const chatSocket = new ReconnectingWebSocket(
             'ws://'
@@ -142,10 +148,11 @@
 			const imgTag = document.createElement('img');
 			const pTag = document.createElement('p');
 			pTag.textContent = message.content;
-			imgTag.src = "http://emilcarlsson.se/assets/mikeross.png";
 			if (author == JSON.parse(document.getElementById('user_id').innerHTML) ){
+				imgTag.src = image;
 				msgListTag.className = 'replies';
 			} else {
+				imgTag.src = match_image;
 				msgListTag.className = 'sent';
 			}
 			msgListTag.appendChild(imgTag);
@@ -168,7 +175,7 @@
 			const wrapDiv = document.createElement('div');
 			wrapDiv.className = 'wrap';
 			const imgTag = document.createElement('img');
-			imgTag.src = "http://emilcarlsson.se/assets/mikeross.png";
+			imgTag.src = match.match_image;
 			
 			const innerDiv = document.createElement('div');
 			innerDiv.className = "meta";
@@ -206,7 +213,8 @@
 			const wrapDiv = document.createElement('div');
 			wrapDiv.className = 'wrap';
 			const imgTag = document.createElement('img');
-			imgTag.src = "http://emilcarlsson.se/assets/mikeross.png";
+			imgTag.src = match.match_image;
+	
 			
 			const innerDiv = document.createElement('div');
 			innerDiv.className = "meta";
