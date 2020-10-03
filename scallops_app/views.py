@@ -9,7 +9,7 @@ import random
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Max
-from .forms import ProfileForm
+from .forms import ProfileForm, UserForm, ImageForm
 
 
 import json
@@ -32,6 +32,7 @@ def display_about_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
 
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
@@ -47,7 +48,7 @@ def display_single(request):
 def display_contact_us(request):
     if "user_id" not in request.session:
         return redirect("/login/")
-
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
@@ -101,6 +102,7 @@ def process_login(request):
         if bcrypt.checkpw(request.POST['login_password'].encode(), logged_user.password.encode()):
             request.session["user_id"] = logged_user.id
             request.session["user_first"] = logged_user.first_name
+            request.session["user_last"] = logged_user.last_name
             print("user id is: "+ str(logged_user.id))
             return redirect('/')
         else:
@@ -130,6 +132,7 @@ def display_message(request):
 def display_profile(request):
     if "user_id" not in request.session:
         return redirect("/login/")
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
 
     context = {
         "user" : User.objects.get(id=request.session["user_id"]),
@@ -142,6 +145,7 @@ def display_1on1(request):
         return redirect("/login/")
 
     logged_user = User.objects.get(id=request.session["user_id"])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
 
     try:
         all_users = User.objects.exclude(id=logged_user.id).order_by("created_at")
@@ -187,39 +191,100 @@ def display_1on1(request):
         return redirect("/")
 
 def display_edit_profile(request):
+   
     if "user_id" not in request.session:
         return redirect("/login/")
     logged_user = User.objects.get(id=request.session["user_id"])
-
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     profile = Profile.objects.get(user=logged_user)
-
+    
     if request.method == "POST":
-        form = ProfileForm(request.POST or None, request.FILES, instance=profile )
-        if form.is_valid():
-            profile = form.save(commit= False)
-            profile.save()
-            messages.success(request, "You successfully updated the post")
-            print("**********        "+ str(profile.user.id) + "         ********")
-            context= {
-                'form': form,
-                'image':profile.image,
-            }
-            return render(request, 'account-settings.html',context)
-        else:
-            context= {
-            'form': form,
-            'error': 'The form was not updated successfully.'}
-            return render(request,'account-settings.html' , context)
+        if 'profile' in request.POST:
+            profileForm = ProfileForm(request.POST or None, request.FILES, instance=profile )
+            if profileForm.is_valid():
+                profile = profileForm.save(commit= False)
+                profile.save()
+                messages.success(request, "You successfully updated your profile")
+                print("**********        "+ str(profile.user.id) + "         ********")
+                context= {
+                    'profileForm': profileForm,
+                    'profile':profile,
+                    'imageForm':ImageForm(None, instance=profile),
+                    'userForm': UserForm(None, instance = logged_user )
+                }
+                return render(request, 'account-settings.html',context)
+            else:
+                context= {
+                'profileForm': profileForm,
+                'profile':profile,
+                'userForm': UserForm(None, instance = logged_user ),
+                'imageForm':ImageForm(None, instance=profile),
+                'error': 'The form was not updated successfully.'}
+                return render(request,'account-settings.html' , context)
+        
+        elif 'image' in request.POST:
+            imageForm = ImageForm(request.POST or None, request.FILES, instance=profile )
+            if imageForm.is_valid():
+                image = imageForm.save(commit= False)
+                image.save()
+                messages.success(request, "You successfully updated your image")
+                print("**********        "+ str(profile.user.id) + "         ********")
+                context= {
+                    'profileForm': ProfileForm(None, instance=profile),
+                    'profile':profile,
+                    'imageForm':imageForm,
+                    'userForm': UserForm(None, instance = logged_user )
+                }
+                return render(request, 'account-settings.html',context)
+            else:
+                context= {
+                'profileForm': ProfileForm(None, instance=profile),
+                'userForm': UserForm(None, instance = logged_user ),
+                'imageForm': imageForm,
+                'profile':profile,
+                'error': 'The image was not updated successfully.'}
+                return render(request,'account-settings.html' , context)
+
+        elif 'user' in request.POST:
+            userForm = UserForm(request.POST or None, instance=logged_user)
+            if userForm.is_valid():
+                user = userForm.save(commit=False)
+                user.save()
+                messages.success(request, "You successfully updated user info")
+                print("**********        "+ str(user.id) + "         ********")
+                context= {
+                    'profileForm': ProfileForm(None, instance = profile),
+                    'profile':profile,
+                    'userForm': userForm,
+                    'imageForm':ImageForm(None, instance=profile)
+                }
+                return render(request,'account-settings.html', context)
+            else:
+                context = {
+                    'profileForm':ProfileForm(None, instance=profile),
+                    'userForm': userForm,
+                    'profile':profile,
+                    'imageForm':ImageForm(None, instance=profile),
+                    'error':'The form was not updated successfully',
+                }
+                return render(request, 'account-settings.html', context)
+
             
     else:
-        form = ProfileForm(None, instance= profile)
-        context= {'form': form}
+        profileForm = ProfileForm(None, instance= profile)
+        userForm = UserForm(None, instance = logged_user )
+        context= {
+            'profileForm': profileForm,
+            'userForm':userForm,
+            'profile':profile,
+            'imageForm':ImageForm(None, instance=profile),
+        }
         return render(request, 'account-settings.html', context)
 
 
 # FIXME:
 
-    return render(request, 'account-settings.html')
+    # return render(request, 'account-settings.html')
 
 def process_profile(request):
     print("*****IN PROCESS PROFILE*************")
@@ -332,6 +397,7 @@ def room(request, room_name, user_id, match_id):
     if "user_id" not in request.session:
         return redirect("/login/")
     logged_user = User.objects.get(id=request.session['user_id'])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     if logged_user.id != user_id:
         return redirect('/login')
     user1 = Match.objects.get(id=match_id).user1
@@ -341,45 +407,29 @@ def room(request, room_name, user_id, match_id):
     else:
         matched_user = user1
     
-    # matches = Match.objects.filter(user1 = user_id).order_by('messages').all()[:15]
     matches = Match.objects.filter(user1=user_id).annotate(message = Max('messages')).order_by('-message').all()[:30]
-
-    # print(matches)
-    # new_messages = []
-    # match_with_no_msgs = []
-    # for match in matches:
-    #     message = match.messages.order_by('-created_at').all()[:1]
-    #     if match.id > Match.objects.get(user1=match.user2.id, user2=user_id).id:
-    #         matchId = Match.objects.get(user1=match.user2.id, user2=user_id).id
-    #     else:
-    #         matchId = match.id
-        # if len(message)>0:
-        #     new_messages.append({
-        #         "match_id" : matchId,
-        #         # MATCH ID NEEDS TO BE SMALLER ONE
-        #         "matched_user_first_name": match.user2.first_name,
-        #         "matched_user_last_name": match.user2.last_name,
-        #         'content':message[0].content,
-        #         'created_at':message[0].created_at,
-        #     })
-        # else:
-        #     match_with_no_msgs.append(match)
+    user = User.objects.get(id=request.session["user_id"])
 
     context = {
         'room_name': room_name,
         'user_id': request.session["user_id"],
-        'first_name':User.objects.get(id=request.session["user_id"]).first_name,
-        'last_name':User.objects.get(id=request.session["user_id"]).last_name,
+        'first_name':user.first_name,
+        'last_name':user.last_name,
+        'image': user.profile.image.url,
         # "matches": matches,
         "matched_user_id": matched_user.id,
         "matched_user_first_name":matched_user.first_name,
         'match_id': match_id,
+        "match_image":matched_user.profile.image.url,
     }
     return render(request, 'chat/room.html', context)
 
 
 def match_list(request):
+    if "user_id" not in request.session:
+        return redirect("/login/")
     matches = Match.objects.filter(user1=request.session["user_id"])
+    request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
     if not matches:
         return render(request, 'chatError.html')
     match_list = []
