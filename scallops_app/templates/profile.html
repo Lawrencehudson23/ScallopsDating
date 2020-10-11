@@ -1,28 +1,971 @@
 {% extends "base.html" %}
-
-{% block title%}{% endblock %}
-
+{% load static %}
+{% block title%}profile{% endblock %}
 {% block content %}
-{% load static %} 
-    <h1>Hello {{ user.first_name }}</h1>
-    <img src="{{ user.profile.image.url }}" alt="profile pic" height="200px" width="200px">
-        <h2>{{ uploaded_file_url }}</h2>
-        <p>Gender: {{ user.gender }} </p>
-        <p>City: {{ user.city }}</p>
-        <p>DOB: {{ user.birthday }}</p>
-        <p>Summary: {{ user.profile.summary}}</p>
-        <div>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
 
-        </div>
-        <p>Interests: {{ user.profile.interest}}</p>
-        <div>
+		<link
+			rel="apple-touch-icon"
+			sizes="76x76"
+			href="{% static 'images/apple-icon.png' %}"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			href="{% static 'images/favicon.png' %}"
+		/>
+		<!--     Fonts and icons     -->
+		<link
+			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"
+			rel="stylesheet"
+		/>
+		<!-- Nucleo Icons -->
+		<link href="{% static 'css/nucleo-icons.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/nucleo-svg.css' %}" rel="stylesheet" />
+		<!-- Font Awesome Icons -->
+		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
+		<link href="{% static 'css/nucleo-svg.css' %}" rel="stylesheet" />
+		<!-- CSS Files -->
+		<link
+			href="{% static 'css/argon-design-system.css' %}"
+			rel="stylesheet"
+		/>
+		<link href="{% static 'css/style.css' %}" rel="stylesheet" />
 
-        </div>
-        <p>Goals:{{ user.profile.goals }}</p>
-        <div>
+		<div class="account-settings">
+		<div class="wrapper">
+			<div class="section-shaped my-0 skew-separator skew-mini">
+				<div class="page-header page-header-small header-filter">
+					<div
+						class="page-header-image"
+						style="
+							background-image: url('{% static "images/pages/georgie.jpg" %}');
+						"
+					></div>
+					<div class="container">
+						<div class="header-body text-center mb-7">
+							<div class="row justify-content-center">
+								<div class="col-xl-5 col-lg-6 col-md-8 px-5">
+									<h1 class="text-white">Your account</h1>
+									<p class="text-lead text-white">
+										That’s the main thing people are controlled by! Thoughts -
+										their perception of themselves!
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bg-secondary">
+				<div class="container bg-white card mb-0">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="section">
+								<!-- User Information -->
+								<section class="text-center">
+									
+									<div
+										class="fileinput fileinput-new text-center"
+										data-provides="fileinput"
+									>
+										<div class="fileinput-new thumbnail img-circle img-raised">
+											<img src="{{ user.profile.image.url }}" alt="..." />
+										</div>
+										<div
+											class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"
+										></div>
+										{% comment %} <form method="POST" enctype="multipart/form-data">
+											{% csrf_token %}
+										<div>
+											<span
+												class="btn btn-raised btn-round btn-primary btn-file btn-sm mx-auto mt-3"
+											>
+												<span class="fileinput-new">
+													{{ imageForm.image }}
+												</span>
+												<span class="fileinput-exists">
+													<input id="change-btn" type="submit" name= "image" value="CHANGE">
+												</span>
+											
+											</span>
+											
+												<br />
+												<a
+												href="#pablo"
+												class="btn btn-danger btn-round fileinput-exists btn-simple btn-sm"
+												data-dismiss="fileinput"
+												><i class="tim-icons icon-simple-remove"></i> Remove</a
+												>
+											</div>
+										</form> {% endcomment %}
+									</div>
+									
+									<h3 class="title mt-4">{{request.session.user_first}} {{request.session.user_last}}</h3>
+								</section>
+								<!-- User Information -->
+								<!-- Profile Sidebar -->
+								<section>
+									<br />
+									<ul class="nav flex-column" role="tablist">
+										<li class="nav-item">
+											<a
+												class="nav-link active"
+												data-toggle="tab"
+												href="#link1"
+												role="tablist"
+											>
+												<i class="tim-icons icon-single-02"></i>
+												General
+											</a>
+										</li>
+										<hr class="line-primary" />
+										<li class="nav-item">
+											<a
+												class="nav-link"
+												data-toggle="tab"
+												href="#link2"
+												role="tablist"
+											>
+												<i class="tim-icons icon-credit-card"></i>
+												Profile
+											</a>
+										</li>
+										<hr class="line-primary" />
+										<li class="nav-item">
+											<a
+												class="nav-link"
+												data-toggle="tab"
+												href="#link3"
+												role="tablist"
+											>
+												<i class="tim-icons icon-lock-circle"></i>
+												Security
+											</a>
+										</li>
+										<hr class="line-primary" />
+										<li class="nav-item">
+											<a
+												class="nav-link"
+												data-toggle="tab"
+												href="#link4"
+												role="tablist"
+											>
+												<i class="tim-icons icon-volume-98"></i>
+												Notifications
+											</a>
+										</li>
+									</ul>
+								</section>
+								<!-- End Profile Sidebar -->
+								<!-- Profile Completion -->
+								<br /><br /><br />
+								<div>
+									<div class="progress-container progress-primary">
+										<span class="progress-badge">Profile Completion</span>
+										<div class="progress-wrapper">
+											<div class="progress-info">
+												<div class="progress-percentage">
+													<span class="text-primary">80%</span>
+												</div>
+											</div>
+											<div class="progress">
+												<div
+													class="progress-bar bg-primary"
+													role="progressbar"
+													aria-valuenow="80"
+													aria-valuemin="0"
+													aria-valuemax="100"
+													style="width: 80%"
+												></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- End Profile Completion -->
+							</div>
+						</div>
+						<div class="col-md-8 ml-auto">
+							<div class="section">
+								<div class="tab-content">
+									<div class="tab-pane active" id="link1">
+										<div>
+											{% if messages %}
+											<ul class="messages">
+											{% for message in messages %}
+												<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+											{% endfor %}
+											</ul>
+											{% endif %}
+										
+											{% if error %}
+												{{ error }}
+											{% endif %}
 
-        </div>
 
-        <button><a href="/edit/profile/"> Edit your Profile </a></button>
-    
-{% endblock %}
+
+
+
+
+											<header>
+												<h2 class="text-uppercase">General information</h2>
+											</header>
+											<hr class="line-primary" />
+											<br />
+											<form method='POST' enctype="multipart/form-data">
+												{% csrf_token %}
+												<div class="row">
+													<div class="col-md-3 align-self-center">
+														<label class="labels" for="#firstName"
+														>First Name</label
+														>
+													</div>
+													<div class="col-md-9 align-self-center">
+														<div class="user-group">
+															<!-- <input
+															id="firstName"
+															name="firstName"
+															class="form-control"
+															type="text"
+															value="Charlie"
+															required="required"
+															/> -->
+															{{ user.first_name }}
+														</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#lastName"
+													>Last Name</label
+													>
+												</div>
+												<div class="col-md-9 align-self-center">
+													<div class="user-group">
+														<!-- <input
+														id="lastName"
+															name="lastName"
+															class="form-control"
+															type="text"
+															value="Bailey"
+															required="required"
+															/> -->
+														{{ user.last_name }}
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels">I’m</label>
+												</div>
+												<div class="col-md-4 align-self-center">
+													<div class="user-group">
+														<!-- <select
+															class="form-control"
+															data-trigger
+															name="choices-single-default"
+															id="choices-single-default"
+															>
+															<option value="2">Male</option>
+															<option value="3">Female</option>
+														</select> -->
+														{{ user.gender }}
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels">Birthday</label>
+												</div>
+												<div class="col-md-9 align-self-center">
+													<div class="row">
+														<div class="col-md-9 align-self-center">
+															<div class="user-group">
+																{{ user.birthday }}
+																<!-- <select
+																class="form-control"
+																	data-trigger
+																	name="choices-single-default"
+																	id="choices-single-default"
+																>
+																<option>January</option>
+																<option>February</option>
+																<option>March</option>
+																	<option selected="selected">April</option>
+																	<option>May</option>
+																	<option>June</option>
+																	<option>July</option>
+																	<option>August</option>
+																	<option>September</option>
+																	<option>October</option>
+																	<option>November</option>
+																	<option>December</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-4">
+															<div class="user-group">
+																<select
+																class="form-control"
+																data-trigger
+																name="choices-single-default"
+																id="choices-single-default"
+																>
+																<option>1</option>
+																	<option>2</option>
+																	<option>3</option>
+																	<option>4</option>
+																	<option>5</option>
+																	<option>6</option>
+																	<option>7</option>
+																	<option>8</option>
+																	<option>9</option>
+																	<option>10</option>
+																	<option selected="selected">11</option>
+																	<option>12</option>
+																	<option>13</option>
+																	<option>14</option>
+																	<option>15</option>
+																	<option>16</option>
+																	<option>17</option>
+																	<option>18</option>
+																	<option>19</option>
+																	<option>20</option>
+																	<option>21</option>
+																	<option>22</option>
+																	<option>23</option>
+																	<option>24</option>
+																	<option>25</option>
+																	<option>26</option>
+																	<option>27</option>
+																	<option>28</option>
+																	<option>29</option>
+																	<option>30</option>
+																	<option>31</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-4">
+															<div class="user-group">
+																<select
+																	class="form-control"
+																	data-trigger
+																	name="choices-single-default"
+																	id="choices-single-default"
+																	>
+																	<option>1986</option>
+																	<option>1987</option>
+																	<option>1988</option>
+																	<option selected="selected">1989</option>
+																	<option>1990</option>
+																	<option>1991</option>
+																	<option>1992</option>
+																	<option>1993</option>
+																	<option>1994</option>
+																	<option>1995</option>
+																	<option>1996</option>
+																	<option>1997</option>
+																	<option>1998</option>
+																	<option>1999</option>
+																	<option>2000</option>
+																	<option>2001</option>
+																	<option>2002</option>
+																	<option>2003</option>
+																	<option>2004</option>
+																	<option>2005</option>
+																	<option>2006</option>
+																	<option>2007</option>
+																	<option>2008</option>
+																	<option>2009</option>
+																	<option>2010</option>
+																	<option>2011</option>
+																	<option>2012</option>
+																	<option>2013</option>
+																	<option>2014</option>
+																	<option>2015</option>
+																	<option>2016</option>
+																	<option>2017</option>
+																	<option>2018</option>
+																	<option>2019</option>
+																</select> -->
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#email">Email</label>
+												</div>
+												<div class="col-md-9 align-self-center">
+													<div class="user-group">
+														<!-- <input
+														id="email"
+														name="email"
+														class="form-control"
+															type="email"
+															value="charlie.bailey@example.com"
+															required="required"
+														/> -->
+														{{user.email}}
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#location"
+													>Your Location</label
+													>
+												</div>
+												<div class="col-md-9 align-self-center">
+													<div class="user-group">
+														<!-- <input
+															id="location"
+															name="location"
+															class="form-control"
+															type="text"
+															value="Sydney, A"
+															required="required"
+														/> -->
+														{{user.city}}
+													</div>
+												</div>
+											</div>
+											<!-- <div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#phone"
+														>Phone Number</label
+														>
+													</div>
+													<div class="col-md-4 align-self-center">
+														<div class="user-group">
+															<input
+															id="phone"
+															name="phone"
+															class="form-control"
+															type="tel"
+															value=""
+															required="required"
+															/>
+														</div>
+												</div>
+											</div> -->
+											<!-- <div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels">Language</label>
+												</div>
+												<div class="col-md-4 align-self-center">
+													<div class="user-group">
+														<select
+															class="form-control"
+															data-trigger
+															name="choices-single-default"
+															id="choices-single-default"
+															>
+															<option selected>English</option>
+															<option value="2">French</option>
+															<option value="3">Spanish</option>
+															<option value="4">Deutsche</option>
+															<option value="4">Russian</option>
+														</select>
+													</div>
+												</div>
+											</div> -->
+											<div class="row mt-5">
+												<div class="col-md-6">
+													<button name="user" class="btn btn-primary" >
+														<a style="color:white" href="/edit/profile/"> Edit Your Profile </a>
+													</button>
+													
+												</div>
+											</div>
+											</form>
+										</div>
+									</div>
+									<div class="tab-pane" id="link2">
+										<header>
+											<h2 class="text-uppercase">Edit Profile Content</h2>
+										</header>
+										<hr class="line-primary" />
+										<br />
+										{{ profileForm.non_field_errors }}
+										<form method="POSt" enctype="multipart/form-data">
+											{% csrf_token %}
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#summary"
+														>Summary</label
+													>
+												</div>
+												<div class="col-md-9 align-self-center">
+													{{profileForm.summary.errors}}
+													<div class="user-group">
+														<!-- <input
+															id="summary"
+															name="summary"
+															class="form-control"
+															type="text"
+															value=""
+															required="required"
+														/> -->
+														{{ profileForm.summary }}
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#interest"
+														>Interests</label
+													>
+												</div>
+												<div class="col-md-9 align-self-center">
+													{{profileForm.interest.errors}}
+													<div class="user-group">
+														<!-- <input
+															id="interest"
+															name="interest"
+															class="form-control"
+															type="text"
+															value=""
+															required="required"
+														/> -->
+														{{ profileForm.interest }}
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-3 align-self-center">
+													<label class="labels" for="#goals"
+														>Goals</label
+													>
+												</div>
+												<div class="col-md-9 align-self-center">
+													{{profileForm.goals.errors}}
+													<div class="user-group">
+														<!-- <input
+															id="goals"
+															name="goals"
+															class="form-control"
+															type="text"
+															value=""
+															required="required"
+														/> -->
+														{{ profileForm.goals }}
+													</div>
+												</div>
+											</div>
+											
+											<button class="btn btn-primary btn-sm" name="profile">
+												<i class="tim-icons icon-simple-add"></i>
+												Save Changes
+											</button>
+										</form>
+									</div>
+									<div class="tab-pane" id="link3">
+										<div
+											class="g-pos-rel h-100 g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-30--md"
+										>
+											<header>
+												<h2
+													class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0"
+												>
+													Security Questions
+												</h2>
+											</header>
+											<hr class="line-primary" />
+											<form>
+												<div class="row">
+													<div class="col-md-6">
+														<label>Security Question</label>
+														<div class="user-group">
+															<select
+																class="form-control"
+																data-trigger
+																name="choices-single-default"
+																id="choices-single-default"
+															>
+																<option disabled selected>Your Question</option>
+																<option value="2">Question 1</option>
+																<option value="3">Question 2</option>
+																<option value="4">Question 3</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<label>Your Answer</label>
+														<div class="user-group">
+															<input
+																class="form-control"
+																type="text"
+																placeholder="Enter your answer"
+															/>
+														</div>
+													</div>
+												</div>
+												<br /><br />
+												<header>
+													<h2 class="text-uppercase">Security Settings</h2>
+												</header>
+												<hr class="line-primary" />
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span>Notify me via email when logging in</span>
+													<label class="custom-toggle">
+														<input type="checkbox" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span
+														>Send SMS confirmation for all online payments</span
+													>
+													<label class="custom-toggle">
+														<input type="checkbox" checked="" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span>Check which devices accessed your account</span>
+													<label class="custom-toggle">
+														<input type="checkbox" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span
+														>Find My Device, make sure your device can be found
+														if it gets lost</span
+													>
+													<label class="custom-toggle">
+														<input type="checkbox" checked="" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span
+														>Lock your device with a PIN, pattern, or
+														password</span
+													>
+													<label class="custom-toggle">
+														<input type="checkbox" checked="" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div
+													class="user-group d-flex align-items-center justify-content-between"
+												>
+													<span
+														>Manage what apps have access to app-usage data on
+														your device</span
+													>
+													<label class="custom-toggle">
+														<input type="checkbox" />
+														<span
+															class="custom-toggle-slider rounded-circle"
+															data-label-off="OFF"
+															data-label-on="ON"
+														></span>
+													</label>
+												</div>
+												<div class="row mt-5 justify-content-end">
+													<div class="col-md-4 actions">
+														<button
+															class="btn btn-outline-primary btn-sm"
+															type="reset"
+														>
+															Cancel
+														</button>
+														<button
+															class="btn btn-primary btn-sm"
+															type="button"
+														>
+															Save Changes
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+									<div class="tab-pane" id="link4">
+										<div class="container">
+											<div class="row">
+												<div class="col-12">
+													<div
+														class="alert alert-primary text-small"
+														role="alert"
+													>
+														<i class="icon-shield"></i>
+														<span>
+															We will never distribute your email address to
+															third parties. Read about email communication in
+															our privacy policy.
+														</span>
+													</div>
+												</div>
+												<!--end of col-->
+											</div>
+											<hr />
+											<div class="row">
+												<div class="col-12">
+													<form>
+														<h5 class="mb-4">Notification Preferences</h5>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification1"
+																type="checkbox"
+																checked
+															/>
+															<label
+																class="custom-control-label"
+																for="notification1"
+															>
+																<span>Someone mentions me</span>
+															</label>
+														</div>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification2"
+																type="checkbox"
+																checked
+															/>
+															<label
+																class="custom-control-label"
+																for="notification2"
+															>
+																<span>Someone follows me</span>
+															</label>
+														</div>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification3"
+																type="checkbox"
+															/>
+															<label
+																class="custom-control-label"
+																for="notification3"
+															>
+																<span>Someone shares my activty</span>
+															</label>
+														</div>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification4"
+																type="checkbox"
+															/>
+															<label
+																class="custom-control-label"
+																for="notification4"
+															>
+																<span>Someone messages me</span>
+															</label>
+														</div>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification5"
+																type="checkbox"
+															/>
+															<label
+																class="custom-control-label"
+																for="notification5"
+															>
+																<span>Someone adds me to a project</span>
+															</label>
+														</div>
+														<div class="custom-control custom-checkbox mb-3">
+															<input
+																class="custom-control-input"
+																id="notification6"
+																type="checkbox"
+															/>
+															<label
+																class="custom-control-label"
+																for="notification6"
+															>
+																<span>Sales and promotions</span>
+															</label>
+														</div>
+														<button
+															type="submit"
+															class="btn btn-primary btn-sm mt-3 mb-5"
+														>
+															Update preferences
+														</button>
+													</form>
+												</div>
+												<!--end of col-->
+											</div>
+											<!--end of row-->
+											<hr />
+											<div class="row">
+												<div class="col-12">
+													<form>
+														<h5>Notification Frequency</h5>
+														<div class="custom-control custom-radio mb-3">
+															<input
+																name="custom-radio-1"
+																class="custom-control-input"
+																id="freq1"
+																type="radio"
+															/>
+															<label class="custom-control-label" for="freq1">
+																<span>Daily</span>
+															</label>
+														</div>
+														<div class="custom-control custom-radio mb-3">
+															<input
+																name="custom-radio-1"
+																class="custom-control-input"
+																id="freq2"
+																type="radio"
+															/>
+															<label class="custom-control-label" for="freq2">
+																<span>Weekly</span>
+															</label>
+														</div>
+														<div class="custom-control custom-radio mb-3">
+															<input
+																name="custom-radio-1"
+																class="custom-control-input"
+																id="freq3"
+																type="radio"
+															/>
+															<label class="custom-control-label" for="freq3">
+																<span>Monthly</span>
+															</label>
+														</div>
+														<div class="custom-control custom-radio mb-3">
+															<input
+																name="custom-radio-1"
+																class="custom-control-input"
+																id="freq4"
+																checked
+																type="radio"
+															/>
+															<label class="custom-control-label" for="freq4">
+																<span>Never</span>
+															</label>
+														</div>
+														<button
+															type="submit"
+															class="btn btn-primary btn-sm mt-3"
+														>
+															Update
+														</button>
+													</form>
+												</div>
+												<!--end of col-->
+											</div>
+											<!--end of row-->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</div>
+
+		<!--   Core JS Files   -->
+		<script
+			src="{% static 'js/core/jquery.min.js' %}"
+			type="text/javascript"
+		></script>
+		<script
+			src="{% static 'js/core/popper.min.js' %}"
+			type="text/javascript"
+		></script>
+		<script
+			src="{% static 'js/core/bootstrap.min.js' %}"
+			type="text/javascript"
+		></script>
+		<script src="{% static 'js/plugins/perfect-scrollbar.jquery.min.js' %}"></script>
+		<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+		<script src="{% static 'js/plugins/bootstrap-switch.js' %}"></script>
+		<!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+		<script
+			src="{% static 'js/plugins/nouislider.min.js' %}"
+			type="text/javascript"
+		></script>
+		<!--  Plugin for the Carousel, full documentation here: http://jedrzejchalubek.com/ -->
+		<script src="{% static 'js/plugins/glide.js' %}" type="text/javascript"></script>
+		<!--  Plugin for the DatePicker, full documentation here: https://flatpickr.js.org/ -->
+		<script src="{% static 'js/plugins/moment.min.js' %}"></script>
+		<!--	Plugin for Select, full documentation here: https://joshuajohnson.co.uk/Choices/ -->
+		<script
+			src="{% static 'js/plugins/choices.min.js' %}"
+			type="text/javascript"
+		></script>
+		<!--  Plugin for the DateTimePicker, full documentation here: https://flatpickr.js.org/ -->
+		<script
+			src="{% static 'js/plugins/datetimepicker.js' %}"
+			type="text/javascript"
+		></script>
+		<!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+		<script src="{% static 'js/plugins/jasny-bootstrap.min.js' %}"></script>
+		<!-- Plugin for Headrom, full documentation here: https://wicky.nillia.ms/headroom.js/ -->
+		<script src="{% static 'js/plugins/headroom.min.js' %}"></script>
+		<!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+		<!--  Google Maps Plugin    -->
+		<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+		<script
+			src="{% static 'js/argon-design-system.min.js' %}"
+			type="text/javascript"
+		></script>
+		<script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+		<script>
+			window.TrackJS &&
+				TrackJS.install({
+					token: "ee6fab19c5a04ac1a32a645abde4613a",
+					application: "argon-design-system-pro",
+				});
+		</script>
+		{% endblock %}
+

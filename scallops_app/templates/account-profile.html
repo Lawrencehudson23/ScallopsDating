@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title%}{% endblock %}
+
+{% block content %}
+{% load static %} 
+    <h1>Hello {{ user.first_name }}</h1>
+    <img src="{{ user.profile.image.url }}" alt="profile pic" height="200px" width="200px">
+        <h2>{{ uploaded_file_url }}</h2>
+        <p>Gender: {{ user.gender }} </p>
+        <p>City: {{ user.city }}</p>
+        <p>DOB: {{ user.birthday }}</p>
+        <p>Summary: {{ user.profile.summary}}</p>
+        <div>
+
+        </div>
+        <p>Interests: {{ user.profile.interest}}</p>
+        <div>
+
+        </div>
+        <p>Goals:{{ user.profile.goals }}</p>
+        <div>
+
+        </div>
+
+        <button><a href="/edit/profile/"> Edit your Profile </a></button>
+    
+{% endblock %}
