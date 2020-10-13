@@ -194,6 +194,10 @@ label {
   display: inline-block;
   margin-bottom: 0.5rem; }
 
+#label {
+  margin:0.7rem 0rem 0.7rem 1.5rem;
+}
+
 button {
   border-radius: 0; }
 
@@ -19039,7 +19043,6 @@ hr {
   background:none;
   border-style: none;
   color: white;
-  font-size: 1rem;
 }
 
 .fileinput-new #imageField, input[tyep=file] {

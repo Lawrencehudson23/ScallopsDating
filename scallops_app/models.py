@@ -135,17 +135,6 @@ class Profile(models.Model):
         to=User, on_delete=models.CASCADE, primary_key=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
-# class Profile(models.Model):
-#     # image = models.ImageField(width_field=200px, height_field=400px)
-#     summary = models.TextField()
-#     interest = models.TextField()
-#     goals = models.TextField()
-
-# class Game(models.Model):
-#     option1 = models.CharField(max_length=1000)
-#     option2 = models.CharField(max_length=1000)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
 
 class Message(models.Model):
     content = models.TextField()
@@ -163,12 +152,6 @@ class Message(models.Model):
         return self.object.order_by('-created_at').all()[:10]
 
 
-# TODO: PICTURE
-# class Picture(models.Model):
-#     image = models.FileField(upload_to='profile', null=True)
-#     created_at = models.DateTimeField(auto_now_add = True)
-#     updated_at = models.DateTimeField(auto_now = True)
-#     user = models.ForeignKey(User, related_name='pictures', null=True,on_delete=models.CASCADE)
 
 class Match(models.Model):
     user1 = models.ForeignKey(

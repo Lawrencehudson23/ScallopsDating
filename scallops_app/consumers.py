@@ -23,7 +23,6 @@ class ChatConsumer(WebsocketConsumer):
             if len(message)>0:
                 new_messages.append({
                     "match_id" : matchId,
-                    # MATCH ID NEEDS TO BE SMALLER ONE
                     "matched_user_first_name": match.user2.first_name,
                     "matched_user_last_name": match.user2.last_name,
                     'match_image':match.user2.profile.image.url,
@@ -44,9 +43,6 @@ class ChatConsumer(WebsocketConsumer):
 
 
     def fetch_messages(self, data):
-        # author_id = data['from']
-        # author = User.objects.get(id= self.scope["session"]["user_id"])
-        # messages = author.author_messages.order_by('-created_at').all()[:10]
 
         messages = Match.objects.get(id=self.scope['url_route']['kwargs']['match_id']).messages.order_by('-created_at').all()
 

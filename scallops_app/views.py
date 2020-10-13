@@ -10,10 +10,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Max
 from .forms import ProfileForm, UserForm, ImageForm
-
-
 import json
-# Create your views here.
+
 def index(request):
     if "user_id" not in request.session:
         return redirect("/login/")
@@ -60,10 +58,6 @@ def display_registration(request):
 
 def process_registration(request):
     errors = User.objects.user_validator(request.POST)
-    # realErrors=json.dumps(errors)
-    # # print(realErrors['first_name'])
-    # print(realErrors)
-    # print(json.dumps(errors["first_name"]))
 
     if len(errors) > 0:
         for key, value in errors.items():
@@ -118,25 +112,15 @@ def display_login(request):
 
     return render(request, 'login.html')
 
-def display_message(request):
-    return render(request, 'message.html')
-
-    if "user_id" not in request.session:
-        return redirect("/login/")
-
-    context = {
-        "user" : User.objects.get(id=request.session["user_id"]),
-        "all_users" : User.objects.exclude(id=request.session["user_id"]),
-    }
-    return render(request, 'message.html',context)
 def display_profile(request):
     if "user_id" not in request.session:
         return redirect("/login/")
     request.session['num_matches'] = len(Match.objects.filter(user1=request.session["user_id"]))
-
+    logged_user = User.objects.get(id=request.session["user_id"])
     context = {
-        "user" : User.objects.get(id=request.session["user_id"]),
+        "user" : logged_user,
         "all_users" : User.objects.exclude(id=request.session["user_id"]),
+        "profile": Profile.objects.get(user=logged_user),
     }
     return render(request, 'profile.html',context)
 
@@ -205,14 +189,8 @@ def display_edit_profile(request):
                 profile = profileForm.save(commit= False)
                 profile.save()
                 messages.success(request, "You successfully updated your profile")
-                print("**********        "+ str(profile.user.id) + "         ********")
-                context= {
-                    'profileForm': profileForm,
-                    'profile':profile,
-                    'imageForm':ImageForm(None, instance=profile),
-                    'userForm': UserForm(None, instance = logged_user )
-                }
-                return render(request, 'account-settings.html',context)
+      
+                return redirect("/profile")
             else:
                 context= {
                 'profileForm': profileForm,
@@ -228,14 +206,7 @@ def display_edit_profile(request):
                 image = imageForm.save(commit= False)
                 image.save()
                 messages.success(request, "You successfully updated your image")
-                print("**********        "+ str(profile.user.id) + "         ********")
-                context= {
-                    'profileForm': ProfileForm(None, instance=profile),
-                    'profile':profile,
-                    'imageForm':imageForm,
-                    'userForm': UserForm(None, instance = logged_user )
-                }
-                return render(request, 'account-settings.html',context)
+                return redirect("/profile")
             else:
                 context= {
                 'profileForm': ProfileForm(None, instance=profile),
@@ -251,14 +222,7 @@ def display_edit_profile(request):
                 user = userForm.save(commit=False)
                 user.save()
                 messages.success(request, "You successfully updated user info")
-                print("**********        "+ str(user.id) + "         ********")
-                context= {
-                    'profileForm': ProfileForm(None, instance = profile),
-                    'profile':profile,
-                    'userForm': userForm,
-                    'imageForm':ImageForm(None, instance=profile)
-                }
-                return render(request,'account-settings.html', context)
+                return redirect("/profile")
             else:
                 context = {
                     'profileForm':ProfileForm(None, instance=profile),
@@ -282,12 +246,7 @@ def display_edit_profile(request):
         return render(request, 'account-settings.html', context)
 
 
-# FIXME:
-
-    # return render(request, 'account-settings.html')
-
 def process_profile(request):
-    print("*****IN PROCESS PROFILE*************")
 
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
@@ -311,39 +270,7 @@ def process_profile(request):
          'profile_info' : Profile.objects.get(id = request.session['prof_id']),
     }    
     return  render (request, 'profile.html', context)
-def display_game(request):
-    random_id = random.randint(1,44)
 
-    try:
-        Game.objects.get(id=random_id)
-        question=Game.objects.get(id=random_id)
-        print("used try")
-    except:
-        random_id = random.randint(22,44)
-        question = Game.objects.get(id=random_id)
-        print("used except")
-    
-    logged_user = User.objects.get(id=request.session["user_id"])
-
-    context={
-        "question":question,
-        "logged_user":logged_user,
-
-    }
-    return render(request,'game.html', context)
-
-
-def ajax_game(request):
-
-    logged_user = User.objects.get(id=request.session["user_id"])
-
-    context = {
-        'choice' : request.POST["option"],
-        "logged_user": logged_user,
-    }
-    return render(request, 'answer_game.html',context)
-
-# TODO: LIKE DISLIKE
 def like(request):
     currentUser= User.objects.get(id=request.session['user_id'])
     likedUser=User.objects.get(id=request.POST['liked'])
@@ -416,7 +343,6 @@ def room(request, room_name, user_id, match_id):
         'first_name':user.first_name,
         'last_name':user.last_name,
         'image': user.profile.image.url,
-        # "matches": matches,
         "matched_user_id": matched_user.id,
         "matched_user_first_name":matched_user.first_name,
         'match_id': match_id,

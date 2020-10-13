@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title%}{% endblock %}
+{% block title%}Chat{% endblock %}
 {% load static %}
 {% block content %}
 <!DOCTYPE html><html class=''>
@@ -43,7 +43,6 @@
 					<div class="wrap">
 					<img id="profile-img" src="{{image}}" class="online" alt="" />
 					<p>{{ first_name }} {{ last_name }}</p>
-					<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
 					<div id="status-options">
 						<ul>
 							<li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
@@ -52,20 +51,9 @@
 							<li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
 						</ul>
 					</div>
-					<div id="expanded">
-						<label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-						<input name="twitter" type="text" value="mikeross" />
-						<label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-						<input name="twitter" type="text" value="ross81" />
-						<label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-						<input name="twitter" type="text" value="mike.ross" />
-					</div>
 				</div>
 			</div>
-			<div id="search">
-				<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-				<input type="text" placeholder="Search contacts..." />
-			</div>
+	
 			<div id="contacts">
 				<ul id="chat-log">
 				</ul>
